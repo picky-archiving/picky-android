@@ -6,6 +6,8 @@ sealed interface Route {
     @Serializable
     data object AuthRoute: Route
 
+    @Serializable
+    data class PolicyDetail(val policyId: String = "") : Route
 }
 
 sealed interface MainTabRoute : Route {

@@ -10,8 +10,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import hackathon.picky.core.navigation.MainTabRoute
 import hackathon.picky.core.navigation.Route
 import hackathon.picky.feature.home.navigateHome
+import hackathon.picky.feature.home.navigatePolicyDetail
 
 class MainNavigator(
     val navController: NavHostController
@@ -19,7 +21,7 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination: Route = Route.AuthRoute
+    val startDestination: Route = MainTabRoute.Home
 
     private val singleTopOptions = navOptions {
         launchSingleTop = false
@@ -50,8 +52,22 @@ class MainNavigator(
         currentDestination?.hasRoute(it::class) == true
     }
 
-    fun navigateHome(){
+    fun navigateHome() {
         navController.navigateHome(singleTopOptions)
+    }
+
+    fun navigatePolicyDetail(policyId: String) {
+        navController.navigatePolicyDetail(policyId)
+    }
+
+    fun popBackStackIfNotHome() {
+        if (!isSameCurrentDestination<Route.AuthRoute>()) {
+            navController.popBackStack()
+        }
+    }
+
+    private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {
+        return navController.currentDestination?.hasRoute<T>() == true
     }
 }
 

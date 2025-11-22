@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import hackathon.picky.feature.auth.authNavGraph
 import hackathon.picky.feature.home.homeNavGraph
+import hackathon.picky.feature.home.policyDetailNavGraph
 import hackathon.picky.feature.main.MainNavigator
 
 @Composable
@@ -28,10 +29,15 @@ fun MainNavHost(
             navController = navigator.navController,
             startDestination = navigator.startDestination,
         ) {
-           homeNavGraph(
-               padding = padding,
-               navigateMy = {  }
-           )
+            homeNavGraph(
+                padding = padding,
+                navigateMy = { },
+                navigatePolicyDetail = navigator::navigatePolicyDetail
+            )
+
+            policyDetailNavGraph(
+                onBackClick = navigator::popBackStackIfNotHome
+            )
 
             authNavGraph(
                 padding = padding,
