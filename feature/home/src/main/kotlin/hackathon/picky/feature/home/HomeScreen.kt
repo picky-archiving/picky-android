@@ -1,6 +1,7 @@
 package hackathon.picky.feature.home
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,8 +14,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,9 +26,11 @@ import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.common.LogoTopBar
 import hackathon.picky.core.designsystem.theme.Gray50
 import hackathon.picky.core.model.Category
+import hackathon.picky.core.model.SearchFilter
 import hackathon.picky.feature.home.component.HomeInfoSection
+import hackathon.picky.feature.home.component.HomeListVerticalGridScroll
 import hackathon.picky.feature.home.component.HomeTopBanner
-import hackathon.picky.feature.home.component.ListScroll
+import hackathon.picky.feature.home.component.ListInfoFilterSection
 import hackathon.picky.feature.home.component.PolicyDetailContent
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
@@ -37,24 +40,32 @@ internal fun HomeRoute(
     padding: PaddingValues,
     navigateMy: () -> Unit,
     navigateSearch: () -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    policyId: Int? = null,
+    onBackPressed: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    val context = LocalContext.current
+    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
+    LaunchedEffect(policyId) {
+        viewModel.init(policyId)
+    }
+
     BackHandler(enabled = uiState.value is HomeUiState) {
-        viewModel.goBack(context)
+        backDispatcher?.let { viewModel.goBack(onBackPressed) }
     }
 
     HomeScreen(
         padding = padding,
         uiState = uiState.value,
-        onBackClick = { viewModel.goBack(context) },
+        onBackClick = { backDispatcher?.let { viewModel.goBack(onBackPressed) } },
         onBookMarClick = viewModel::toggleBookmark,
         onClickDetail = viewModel::clickDetail,
         navigateMy = navigateMy,
         navigateSearch = navigateSearch,
-        onClickList = viewModel::clickList
+        onClickList = viewModel::clickList,
+        onFilterChange = viewModel::onFilterChange
     )
 }
 
@@ -68,7 +79,8 @@ private fun HomeScreen(
     onBookMarClick: () -> Unit,
     onClickList: (category: Category) -> Unit,
     navigateMy: () -> Unit,
-    navigateSearch: () -> Unit
+    navigateSearch: () -> Unit,
+    onFilterChange: (SearchFilter) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -145,7 +157,14 @@ private fun HomeScreen(
                     onClickBack = onBackClick
                 )
 
-                ListScroll(
+                ListInfoFilterSection(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    listCount = listUiState.list.size,
+                    filter = listUiState.searchFilter,
+                    onFilterChange = onFilterChange
+                )
+
+                HomeListVerticalGridScroll(
                     list = listUiState.list,
                     onClickDetail = onClickDetail,
                     modifier = Modifier.padding(20.dp)
@@ -169,6 +188,7 @@ fun HomeScreenPrev() {
         onClickDetail = { },
         navigateMy = { },
         navigateSearch = {},
-        onClickList = {}
+        onClickList = {},
+        onFilterChange = {}
     )
 }

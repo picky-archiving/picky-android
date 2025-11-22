@@ -7,8 +7,12 @@ sealed interface Route {
     data object AuthRoute: Route
 
     @Serializable
-    data class PolicyDetail(val policyId: String = "") : Route
-    
+    data class Home(val policyId: Int? = null) : Route
+
+
+    @Serializable
+    data object SearchRoute : Route
+
     @Serializable
     data object MyPage : Route
 }

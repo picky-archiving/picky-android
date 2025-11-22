@@ -17,13 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.designsystem.R
-import hackathon.picky.feature.mypage.model.BookmarkItem
-import hackathon.picky.core.designsystem.common.CommonListItem
+import hackathon.picky.core.designsystem.common.CommonListItemBox
 import hackathon.picky.core.designsystem.common.CommonListType
-import hackathon.picky.core.designsystem.theme.Gray800
 import hackathon.picky.core.designsystem.theme.Gray900
-import hackathon.picky.core.designsystem.theme.Primary
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
+import hackathon.picky.core.designsystem.theme.Primary
+import hackathon.picky.feature.mypage.model.BookmarkItem
 
 @Composable
 internal fun BookmarkSection(
@@ -68,7 +67,7 @@ internal fun BookmarkSection(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     rowItems.forEach { item ->
-                        CommonListItem(
+                        CommonListItemBox(
                             id = item.id,
                             imageRes = item.imageRes,
                             title = item.title,

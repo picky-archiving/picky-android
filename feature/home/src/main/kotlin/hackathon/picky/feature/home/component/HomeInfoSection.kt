@@ -29,13 +29,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.designsystem.R
-import hackathon.picky.core.designsystem.common.CommonListItem
+import hackathon.picky.core.designsystem.common.CommonListItemBox
 import hackathon.picky.core.designsystem.common.CommonListType
 import hackathon.picky.core.designsystem.theme.Gray400
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import hackathon.picky.core.model.Category
-import hackathon.picky.feature.home.model.HomeListItem
+import hackathon.picky.core.model.CommonListItem
 import hackathon.picky.feature.home.model.HomeUiTest
 import java.time.LocalDateTime
 
@@ -43,7 +43,7 @@ import java.time.LocalDateTime
 fun HomeInfoSection(
     category: Category? = null,
     description: String? = null,
-    list: List<HomeListItem>,
+    list: List<CommonListItem>,
     onClickDetail: (Int) -> Unit,
     onClickList: (Category) -> Unit,
     modifier: Modifier = Modifier
@@ -98,10 +98,11 @@ fun HomeInfoSection(
                         painter = painterResource(id = R.drawable.back),
                         contentDescription = "rightArrow",
                         tint = Gray400,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier
+                            .size(16.dp)
                             .graphicsLayer {
-                            scaleX = -1f // 좌우 반전
-                        },
+                                scaleX = -1f // 좌우 반전
+                            },
                     )
                 }
             }
@@ -125,7 +126,7 @@ fun HomeInfoSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(list) { item ->
-                CommonListItem(
+                CommonListItemBox(
                     type = CommonListType.FIX,
                     imageRes = item.imageRes,
                     title = item.title,
@@ -153,8 +154,8 @@ fun HomeInfoSectionPrev() {
 
 @Composable
 @Preview
-fun CommonListItemPrev() {
-    CommonListItem(
+fun CommonListItemBoxPrev() {
+    CommonListItemBox(
         imageRes = R.drawable.bookmark_selected,
         title = "exampleasasasasasasas",
         onClickDetail = { },

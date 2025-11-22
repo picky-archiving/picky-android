@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.designsystem.R
@@ -29,7 +30,7 @@ import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import java.time.LocalDateTime
 
 @Composable
-fun CommonListItem(
+fun CommonListItemBox(
     id: Int,
     imageRes: Int,
     title: String,
@@ -38,9 +39,9 @@ fun CommonListItem(
     type: CommonListType = CommonListType.FIX
 ) {
 
-    val size = when(type){
+    val size = when (type) {
         CommonListType.FIX -> 128.dp
-        CommonListType.DYNAMIC ->  (LocalConfiguration.current.screenWidthDp.dp - 52.dp)/2
+        CommonListType.DYNAMIC -> (LocalConfiguration.current.screenWidthDp.dp - 52.dp) / 2
     }
     Column(
         modifier = Modifier
@@ -53,7 +54,7 @@ fun CommonListItem(
             )
     ) {
         Box(
-            modifier =  Modifier
+            modifier = Modifier
                 .size(size)
                 .clip(RoundedCornerShape(8.dp))
         ) {
@@ -86,6 +87,18 @@ fun CommonListItem(
     }
 }
 
-enum class CommonListType{
+@Composable
+@Preview
+fun CommonListItemBoxPreview() {
+    CommonListItemBox(
+        id = 1,
+        imageRes = R.drawable.bookmark_selected,
+        title = "친환경 제품 사용하고 계신가요?",
+        closingDate = LocalDateTime.now().plusDays(5),
+        onClickDetail = {}
+    )
+}
+
+enum class CommonListType {
     FIX, DYNAMIC
 }
