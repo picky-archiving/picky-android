@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -42,10 +41,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.designsystem.R
 import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.core.designsystem.theme.Dimens
+import hackathon.picky.core.designsystem.theme.Gray100
+import hackathon.picky.core.designsystem.theme.Gray400
+import hackathon.picky.core.designsystem.theme.Gray500
+import hackathon.picky.core.designsystem.theme.Gray800
+import hackathon.picky.core.designsystem.theme.PretendardFontFamily
+import hackathon.picky.core.designsystem.theme.Primary
+import hackathon.picky.core.designsystem.theme.Secondary
+import hackathon.picky.feature.home.model.PolicyDetail
 import hackathon.picky.feature.home.model.PolicyDetailUiState
 
 @Composable
@@ -91,11 +99,12 @@ private fun PolicyDetailScreen(
                 title = {
                     Text(
                         text = policyDetail.title,
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = PretendardFontFamily,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = AppColors.Black
+                        color = Gray800
                     )
                 },
                 navigationIcon = {
@@ -146,14 +155,15 @@ private fun PolicyDetailScreen(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(20.dp))
-                        .background(Color(0x1A3C6CE5))
+                        .background(Secondary)
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = "D-${uiState.daysRemaining}",
-                        fontSize = 13.sp,
+                        fontFamily = PretendardFontFamily,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color(0xFF3C6CE5)
+                        color = Primary
                     )
                 }
                 Spacer(modifier = Modifier.height(Dimens.Space8))
@@ -161,18 +171,20 @@ private fun PolicyDetailScreen(
                 // 제목
                 Text(
                     text = policyDetail.title,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = AppColors.Black,
+                    fontFamily = PretendardFontFamily,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Gray800,
                     modifier = Modifier.padding(bottom = Dimens.Space4)
                 )
 
                 // 주관 부처
                 Text(
                     text = policyDetail.department,
-                    fontSize = 14.sp,
+                    fontFamily = PretendardFontFamily,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Normal,
-                    color = AppColors.Gray07,
+                    color = Gray500,
                     modifier = Modifier.padding(bottom = Dimens.Space32)
                 )
 
@@ -181,9 +193,10 @@ private fun PolicyDetailScreen(
                 Spacer(modifier = Modifier.height(Dimens.Space12))
                 Text(
                     text = policyDetail.applicationPeriod,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = AppColors.Black,
+                    fontFamily = PretendardFontFamily,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Gray800,
                     modifier = Modifier.padding(bottom = Dimens.Space32)
                 )
 
@@ -218,9 +231,10 @@ private fun PolicyDetailScreen(
 private fun SectionTitle(title: String) {
     Text(
         text = title,
-        fontSize = 13.sp,
+        fontFamily = PretendardFontFamily,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Medium,
-        color = AppColors.Gray07
+        color = Gray400
     )
 }
 
@@ -229,14 +243,15 @@ private fun EligibilityChip(text: String) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(AppColors.Gray02)
+            .background(Gray100)
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         Text(
             text = text,
-            fontSize = 15.sp,
+            fontFamily = PretendardFontFamily,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
-            color = AppColors.Black,
+            color = Gray800,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -252,7 +267,7 @@ private fun LoadingScreen() {
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            color = Color(0xFF3C6CE5)
+            color = Primary
         )
     }
 }
@@ -315,6 +330,7 @@ private fun BottomActionBar(
                     shape = RoundedCornerShape(8.dp)
                 )
                 .clip(RoundedCornerShape(8.dp))
+                .background(Gray100)
                 .clickable { onBookmarkClick() },
             contentAlignment = Alignment.Center
         ) {
@@ -324,7 +340,7 @@ private fun BottomActionBar(
                     else R.drawable.bookmark_unselected
                 ),
                 contentDescription = if (isBookmarked) "북마크 해제" else "북마크",
-                tint = Color.Unspecified,
+                tint = Primary,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -335,7 +351,7 @@ private fun BottomActionBar(
                 .weight(1f)
                 .height(48.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(Color(0xFF3C6CE5))
+                .background(Primary)
                 .clickable { /* TODO: 신청하기 동작 */ },
             contentAlignment = Alignment.Center
         ) {
@@ -347,4 +363,61 @@ private fun BottomActionBar(
             )
         }
     }
+}
+
+// Preview 데이터
+private val previewPolicyDetail = PolicyDetail(
+    id = "1",
+    title = "청년 내일채움공제",
+    department = "고용노동부",
+    applicationPeriod = "2024.01.01 ~ 2024.12.31",
+    eligibility = listOf(
+        "만 15세 ~ 34세 청년",
+        "중소·중견기업 정규직 재직자",
+        "근속기간 6개월 미만"
+    ),
+    description = "청년이 중소·중견기업에서 장기간 근속할 수 있도록 지원하는 제도입니다. " +
+            "청년과 기업이 공동으로 적립한 금액에 정부가 지원금을 더해 2년 또는 3년 후 목돈을 마련할 수 있도록 돕습니다. " +
+            "청년의 자산형성과 중소기업의 인력 안정화를 동시에 지원하는 정책입니다."
+)
+
+private val previewUiState = PolicyDetailUiState.Success(
+    policyDetail = previewPolicyDetail,
+    daysRemaining = 13,
+    isBookmarked = false
+)
+
+@Preview(showBackground = true)
+@Composable
+private fun PolicyDetailScreenPreview() {
+    PolicyDetailScreen(
+        uiState = previewUiState,
+        onBackClick = {},
+        onBookmarkClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PolicyDetailScreenBookmarkedPreview() {
+    PolicyDetailScreen(
+        uiState = previewUiState.copy(isBookmarked = true),
+        onBackClick = {},
+        onBookmarkClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoadingScreenPreview() {
+    LoadingScreen()
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ErrorScreenPreview() {
+    ErrorScreen(
+        message = "네트워크 오류가 발생했습니다.",
+        onBackClick = {}
+    )
 }
