@@ -10,5 +10,6 @@ data class PolicyDetail(
     val startDate: LocalDate,
     val closingDate: LocalDate?,
     val eligibility: List<String>,
-    val description: String
+    val description: String,
+    val webUrl: String
 )

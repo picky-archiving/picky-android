@@ -18,6 +18,7 @@ fun PolicyDetailData.toEntity(): PolicyDetailEntity {
         } else null,
         eligibility = this.qualifications,
         description = this.content,
-        bookmarked = this.bookmarked
+        bookmarked = this.bookmarked,
+        webUrl = this.url
     )
 }

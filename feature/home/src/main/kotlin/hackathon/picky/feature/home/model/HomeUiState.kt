@@ -26,6 +26,10 @@ sealed class HomeUiState {
         val searchFilter: SearchFilter
     ) : HomeUiState()
 
+    data class Web(
+        val previousUiState: HomeUiState,
+        val webUrl:String
+    ): HomeUiState()
     data object Init : HomeUiState()
 }
 
@@ -74,4 +78,5 @@ val policyDetailData = PolicyDetail(
 정책 예시가 들어갑니다.정책 예시가 들어갑니다.""".trimIndent(),
     imgUrl = "https://sosal.kr/1144?pidx=0",
     startDate = LocalDate.now().minusDays(15),
+    webUrl = "",
 )
