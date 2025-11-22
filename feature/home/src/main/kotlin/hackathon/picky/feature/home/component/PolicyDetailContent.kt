@@ -100,7 +100,7 @@ fun PolicyDetailContent(
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "D-${uiState.daysRemaining}",
+                        text = "D${uiState.daysRemaining}",
                         fontFamily = PretendardFontFamily,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
@@ -116,7 +116,7 @@ fun PolicyDetailContent(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     color = Gray800,
-                    modifier = Modifier.padding(bottom = Dimens.Space4)
+                    modifier = Modifier.padding(bottom = Dimens.Space6)
                 )
 
                 // 주관 부처
@@ -126,32 +126,42 @@ fun PolicyDetailContent(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Normal,
                     color = Gray500,
-                    modifier = Modifier.padding(bottom = Dimens.Space32)
+                    modifier = Modifier.padding(bottom = Dimens.Space20)
+                )
+
+                // 디바이더
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(1.dp)
+                        .background(Gray100)
+                        .padding(bottom = Dimens.Space20)
                 )
 
                 // 신청 기간
                 SectionTitle(title = "신청 기간")
-                Spacer(modifier = Modifier.height(Dimens.Space12))
+                Spacer(modifier = Modifier.height(Dimens.Space10))
                 Text(
                     text = policyDetail.applicationPeriod,
                     fontFamily = PretendardFontFamily,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Normal,
                     color = Gray800,
-                    modifier = Modifier.padding(bottom = Dimens.Space32)
+                    modifier = Modifier.padding(bottom = Dimens.Space40)
                 )
 
                 // 신청 자격
                 SectionTitle(title = "신청 자격")
-                Spacer(modifier = Modifier.height(Dimens.Space12))
+                Spacer(modifier = Modifier.height(Dimens.Space10))
 
                 EligibilityChipGroup(eligibility = policyDetail.eligibility)
 
-                Spacer(modifier = Modifier.height(Dimens.Space24))
+                Spacer(modifier = Modifier.height(Dimens.Space40))
 
                 // 정책 설명
                 SectionTitle(title = "정책 설명")
-                Spacer(modifier = Modifier.height(Dimens.Space12))
+                Spacer(modifier = Modifier.height(Dimens.Space10))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -167,7 +177,7 @@ fun PolicyDetailContent(
                         lineHeight = 22.sp
                     )
                 }
-                Spacer(modifier = Modifier.height(Dimens.Space32))
+                Spacer(modifier = Modifier.height(Dimens.Space48))
             }
         }
 
