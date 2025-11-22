@@ -2,6 +2,7 @@ package hackathon.picky.core.network.datasource.policy
 
 import hackathon.picky.core.network.model.ApiResponse
 import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
+import hackathon.picky.core.network.model.response.BookmarkToggleResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
@@ -31,4 +32,16 @@ interface PolicyDatasource {
      * @param size 페이지 크기
      */
     suspend fun getBookmarkedPolicies(page: Int, size: Int): ApiResponse<BookmarkedPolicyResponse>
+
+    /**
+     * 북마크 등록
+     * @param policyId 정책 ID
+     */
+    suspend fun addBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse>
+
+    /**
+     * 북마크 해제
+     * @param policyId 정책 ID
+     */
+    suspend fun removeBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse>
 }
