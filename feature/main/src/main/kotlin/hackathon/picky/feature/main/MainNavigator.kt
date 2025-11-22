@@ -71,8 +71,7 @@ class MainNavigator(
     }
 
     fun navigateSearch() {
-        navController.navigateSearch(singleTopOptions)
-
+        navController.navigateSearch()
     }
 
     fun onBackPressed() {

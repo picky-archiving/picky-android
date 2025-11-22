@@ -1,13 +1,10 @@
 package hackathon.picky.feature.home
 
-import android.app.Activity
-import android.content.Context
-import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hackathon.picky.core.model.Category
+import hackathon.picky.core.model.SearchFilter
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
 import hackathon.picky.feature.home.model.policyDetailData
@@ -54,12 +51,25 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
 
     fun clickList(category: Category) = viewModelScope.launch {
+        val searchFilter =
+            (uiState.value as? HomeUiState.ListScreen)?.searchFilter ?: SearchFilter.RECENT
         _uiState.update { prev ->
             HomeUiState.ListScreen(
                 previousUiState = prev,
                 list = HomeUiTest.infoSectionList[0].infoList,
-                category = category
+                category = category,
+                searchFilter = searchFilter
             )
+        }
+    }
+
+    fun onFilterChange(searchFilter: SearchFilter) {
+        _uiState.update { prev ->
+            (prev as? HomeUiState.ListScreen?)?.let {
+                it.copy(
+                    searchFilter = searchFilter
+                )
+            } ?: prev
         }
     }
 

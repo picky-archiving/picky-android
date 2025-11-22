@@ -26,9 +26,11 @@ import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.common.LogoTopBar
 import hackathon.picky.core.designsystem.theme.Gray50
 import hackathon.picky.core.model.Category
+import hackathon.picky.core.model.SearchFilter
 import hackathon.picky.feature.home.component.HomeInfoSection
 import hackathon.picky.feature.home.component.HomeListVerticalGridScroll
 import hackathon.picky.feature.home.component.HomeTopBanner
+import hackathon.picky.feature.home.component.ListInfoFilterSection
 import hackathon.picky.feature.home.component.PolicyDetailContent
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
@@ -62,7 +64,8 @@ internal fun HomeRoute(
         onClickDetail = viewModel::clickDetail,
         navigateMy = navigateMy,
         navigateSearch = navigateSearch,
-        onClickList = viewModel::clickList
+        onClickList = viewModel::clickList,
+        onFilterChange = viewModel::onFilterChange
     )
 }
 
@@ -76,7 +79,8 @@ private fun HomeScreen(
     onBookMarClick: () -> Unit,
     onClickList: (category: Category) -> Unit,
     navigateMy: () -> Unit,
-    navigateSearch: () -> Unit
+    navigateSearch: () -> Unit,
+    onFilterChange: (SearchFilter) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -153,6 +157,13 @@ private fun HomeScreen(
                     onClickBack = onBackClick
                 )
 
+                ListInfoFilterSection(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    listCount = listUiState.list.size,
+                    filter = listUiState.searchFilter,
+                    onFilterChange = onFilterChange
+                )
+
                 HomeListVerticalGridScroll(
                     list = listUiState.list,
                     onClickDetail = onClickDetail,
@@ -177,6 +188,7 @@ fun HomeScreenPrev() {
         onClickDetail = { },
         navigateMy = { },
         navigateSearch = {},
-        onClickList = {}
+        onClickList = {},
+        onFilterChange = {}
     )
 }

@@ -3,6 +3,7 @@ package hackathon.picky.feature.home.model
 import android.R
 import hackathon.picky.core.model.Category
 import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.SearchFilter
 import java.time.LocalDateTime
 
 sealed class HomeUiState {
@@ -22,7 +23,8 @@ sealed class HomeUiState {
     data class ListScreen(
         val previousUiState: HomeUiState,
         val list: List<CommonListItem>,
-        val category: Category
+        val category: Category,
+        val searchFilter: SearchFilter
     ) : HomeUiState()
 
     data object Init : HomeUiState()

@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import hackathon.picky.core.navigation.Route
 
 fun NavController.navigateSearch(
-    navOptions: NavOptions
+    navOptions: NavOptions? = null
 ) {
     navigate(Route.SearchRoute, navOptions)
 }
