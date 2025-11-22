@@ -1,5 +1,6 @@
 package hackathon.picky.feature.main
 
+import androidx.compose.foundation.background
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -7,9 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.feature.main.R
+import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.feature.main.component.MainNavHost
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -49,7 +52,7 @@ private fun MainScreenContent(
     snackBarHostState: SnackbarHostState,
 ) {
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.background(AppColors.White),
         content = { padding ->
             MainNavHost(
                 navigator = navigator,

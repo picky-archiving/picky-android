@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -139,7 +140,7 @@ private fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(Color.White)
                 .padding(padding)
         ) {
             when (uiState) {
@@ -178,7 +179,7 @@ private fun HomeScreen(
                             Spacer(modifier = Modifier.height(20.dp))
 
                             (uiState as HomeUiState.Main).infoSectionList.forEach { item ->
-                                HorizontalDivider(Modifier.height(8.dp), color = Gray50)
+                                HorizontalDivider(Modifier.height(16.dp), color = Gray50)
 
                                 HomeInfoSection(
                                     category = item.category,
@@ -187,6 +188,8 @@ private fun HomeScreen(
                                     onClickList = onClickList,
                                     modifier = Modifier.padding(horizontal = 20.dp)
                                 )
+
+                                Spacer(modifier = Modifier.height(20.dp))
                             }
                         }
                     }

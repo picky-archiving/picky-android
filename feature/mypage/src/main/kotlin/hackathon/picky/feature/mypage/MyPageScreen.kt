@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -30,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.common.PickySnackbar
 import hackathon.picky.core.designsystem.theme.AppColors
+import hackathon.picky.core.designsystem.theme.Gray50
 import hackathon.picky.core.designsystem.theme.Primary
 import hackathon.picky.core.model.common.CommonListItemTest
 import hackathon.picky.feature.mypage.component.BookmarkSection
@@ -107,84 +109,93 @@ private fun MyPageScreen(
             onClearError()
         }
     }
+    Box(modifier = Modifier.fillMaxSize().background(AppColors.White)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(padding.calculateTopPadding())
+                .background(Gray50)
+        )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AppColors.White)
-            .padding(padding)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+//                .background(AppColors.White)
+                .padding(padding)
         ) {
-        when (uiState) {
-            is MyPageUiState.Main -> {
-                // 헤더
-                BackTopBar(
-                    title = "마이페이지",
-                    onClickBack = onBackClick,
-                    onClickSearch = onSearchClick
-                )
-
-                // 로딩 상태 표시
-                if (uiState.isLoading) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(
-                            color = Primary
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                when (uiState) {
+                    is MyPageUiState.Main -> {
+                        // 헤더
+                        BackTopBar(
+                            title = "마이페이지",
+                            onClickBack = onBackClick,
+                            onClickSearch = onSearchClick,
+                            isGray = true
                         )
+
+                        // 로딩 상태 표시
+                        if (uiState.isLoading) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    color = Primary
+                                )
+                            }
+                        } else {
+                            // 스크롤 가능한 컨텐츠
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(scrollState)
+                            ) {
+                                // 프로필 카드
+                                MyPageProfileCard(
+                                    rank = uiState.rank,
+                                    incomeRange = uiState.incomeRange,
+                                    onEditClick = onEditClick
+                                )
+
+                                Spacer(modifier = Modifier.height(32.dp))
+
+                                // 북마크 리스트
+                                BookmarkSection(
+                                    bookmarkedPolicies = uiState.bookmarkedPolicies,
+                                    onClickDetail = onClickDetail
+                                )
+                            }
+                        }
+
+                        // 바텀시트
+                        if (uiState.showRankBottomSheet) {
+                            RankSelectionBottomSheet(
+                                currentRank = uiState.rank,
+                                onDismiss = onDismissBottomSheet,
+                                onRankSelected = onRankSelected
+                            )
+                        }
                     }
-                } else {
-                    // 스크롤 가능한 컨텐츠
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(scrollState)
-                    ) {
-                        // 프로필 카드
-                        MyPageProfileCard(
-                            rank = uiState.rank,
-                            incomeRange = uiState.incomeRange,
-                            onEditClick = onEditClick
-                        )
 
-                        Spacer(modifier = Modifier.height(32.dp))
-
-                        // 북마크 리스트
-                        BookmarkSection(
-                            bookmarkedPolicies = uiState.bookmarkedPolicies,
-                            onClickDetail = onClickDetail
-                        )
-                    }
-                }
-
-                // 바텀시트
-                if (uiState.showRankBottomSheet) {
-                    RankSelectionBottomSheet(
-                        currentRank = uiState.rank,
-                        onDismiss = onDismissBottomSheet,
-                        onRankSelected = onRankSelected
-                    )
+                    else -> {}
                 }
             }
 
-           else -> {}
-        }
-        }
-
-        // Snackbar
-        SnackbarHost(
-            hostState = snackbarHostState,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 16.dp)
-        ) { snackbarData ->
-            PickySnackbar(
-                message = snackbarData.visuals.message,
-                isError = true
-            )
+            // Snackbar
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 16.dp)
+            ) { snackbarData ->
+                PickySnackbar(
+                    message = snackbarData.visuals.message,
+                    isError = true
+                )
+            }
         }
     }
 }
