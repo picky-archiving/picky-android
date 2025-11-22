@@ -31,10 +31,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +53,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.designsystem.R
+import hackathon.picky.core.designsystem.common.PickySnackbar
+import kotlinx.coroutines.launch
 import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.core.designsystem.theme.Dimens
 import hackathon.picky.core.designsystem.theme.Gray100
@@ -67,6 +76,21 @@ internal fun PolicyDetailContent(
     onBookmarkClick: () -> Unit
 ) {
     val policyDetail = uiState.policyDetail
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+    var previousBookmarkState by remember { mutableStateOf(uiState.isBookmarked) }
+    var snackbarMessage by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.isBookmarked) {
+        if (uiState.isBookmarked != previousBookmarkState) {
+            previousBookmarkState = uiState.isBookmarked
+            snackbarMessage = if (uiState.isBookmarked) "북마크에 추가됐어요" else "북마크가 제거됐어요"
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar("")
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -100,6 +124,16 @@ internal fun PolicyDetailContent(
                 isBookmarked = uiState.isBookmarked,
                 onBookmarkClick = onBookmarkClick
             )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                PickySnackbar(
+                    message = snackbarMessage
+                )
+            }
         },
         containerColor = AppColors.White
     ) { paddingValues ->
