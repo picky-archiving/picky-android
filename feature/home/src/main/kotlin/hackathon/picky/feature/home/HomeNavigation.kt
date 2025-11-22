@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import hackathon.picky.core.navigation.MainTabRoute
+import hackathon.picky.core.navigation.Route
 
 fun NavController.navigateHome(
     navOptions: NavOptions
@@ -13,14 +14,32 @@ fun NavController.navigateHome(
     navigate(MainTabRoute.Home, navOptions)
 }
 
+fun NavController.navigatePolicyDetail(
+    policyId: String
+) {
+    navigate(Route.PolicyDetail(policyId))
+}
+
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
-    navigateMy: () -> Unit
+    navigateMy: () -> Unit,
+    navigatePolicyDetail: (String) -> Unit
 ) {
     composable<MainTabRoute.Home> {
         HomeRoute(
             padding = padding,
-            navigateMy = navigateMy
+            navigateMy = navigateMy,
+            navigatePolicyDetail = navigatePolicyDetail
+        )
+    }
+}
+
+fun NavGraphBuilder.policyDetailNavGraph(
+    onBackClick: () -> Unit
+) {
+    composable<Route.PolicyDetail> {
+        PolicyDetailRoute(
+            onBackClick = onBackClick
         )
     }
 }
