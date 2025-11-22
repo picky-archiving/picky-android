@@ -4,6 +4,8 @@ import hackathon.picky.core.network.model.ApiResponse
 import hackathon.picky.core.network.model.response.BookmarkedPolicy
 import hackathon.picky.core.network.model.response.BookmarkedPolicyPageData
 import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
+import hackathon.picky.core.network.model.response.BookmarkToggleData
+import hackathon.picky.core.network.model.response.BookmarkToggleResponse
 import hackathon.picky.core.network.model.response.CategoryGroup
 import hackathon.picky.core.network.model.response.HomeData
 import hackathon.picky.core.network.model.response.HomeResponse
@@ -351,6 +353,51 @@ class FakePolicyDatasource @Inject constructor() : PolicyDatasource {
         val response = BookmarkedPolicyResponse(
             data = pageData,
             message = "북마크된 정책 조회에 성공했습니다.",
+            success = true,
+            timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        )
+
+        return ApiResponse.Success(response)
+    }
+
+    // 북마크 상태를 메모리에 저장 (간단한 시뮬레이션)
+    private val bookmarkedPolicyIds = mutableSetOf<Long>(1L, 3L, 4L, 5L, 11L, 12L)
+
+    override suspend fun addBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse> {
+        delay(300) // 네트워크 지연 시뮬레이션
+
+        // 북마크 추가
+        bookmarkedPolicyIds.add(policyId)
+
+        val data = BookmarkToggleData(
+            bookmarked = true,
+            policyId = policyId
+        )
+
+        val response = BookmarkToggleResponse(
+            data = data,
+            message = "북마크가 등록되었습니다.",
+            success = true,
+            timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        )
+
+        return ApiResponse.Success(response)
+    }
+
+    override suspend fun removeBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse> {
+        delay(300) // 네트워크 지연 시뮬레이션
+
+        // 북마크 제거
+        bookmarkedPolicyIds.remove(policyId)
+
+        val data = BookmarkToggleData(
+            bookmarked = false,
+            policyId = policyId
+        )
+
+        val response = BookmarkToggleResponse(
+            data = data,
+            message = "북마크가 해제되었습니다.",
             success = true,
             timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
         )
