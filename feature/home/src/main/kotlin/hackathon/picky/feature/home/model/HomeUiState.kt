@@ -1,12 +1,10 @@
 package hackathon.picky.feature.home.model
 
-import android.R
 import hackathon.picky.core.model.common.Category
 import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.core.model.common.CommonListItemTest
 import hackathon.picky.core.model.common.SearchFilter
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 sealed class HomeUiState {
     data class Main(
@@ -35,18 +33,12 @@ sealed class HomeUiState {
 val HomeUiTest = HomeUiState.Main(
     infoSectionList = listOf(
         HomeSectionListItem(
-            title = "오늘의 픽!",
-            description = "당신을 위한 맞춤 추천",
-            titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
                 CommonListItemTest, CommonListItemTest, CommonListItemTest
             ),
             category = Category.EDUCATION,
         ),
         HomeSectionListItem(
-            title = "오늘의 픽!",
-            description = "당신을 위한 맞춤 추천",
-            titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
                 CommonListItemTest, CommonListItemTest, CommonListItemTest
             ),

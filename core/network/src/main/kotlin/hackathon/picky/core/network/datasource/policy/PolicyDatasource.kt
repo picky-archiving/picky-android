@@ -3,6 +3,7 @@ package hackathon.picky.core.network.datasource.policy
 import hackathon.picky.core.network.model.ApiResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
+import hackathon.picky.core.network.model.response.PolicyIncomeResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
 
 interface PolicyDatasource {
@@ -23,4 +24,11 @@ interface PolicyDatasource {
      * @param policyId 정책 ID
      */
     suspend fun getPolicyDetail(policyId: Long): ApiResponse<PolicyDetailResponse>
+
+
+    /**
+     * 소득분위별 게시물 조회(조회수 상위 3개)
+     * @Header userId
+     */
+    suspend fun getPolicyIncomeList(): ApiResponse<PolicyIncomeResponse>
 }

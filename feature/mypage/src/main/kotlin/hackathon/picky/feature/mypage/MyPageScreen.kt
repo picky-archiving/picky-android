@@ -28,7 +28,6 @@ import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.common.PickySnackbar
 import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.core.designsystem.theme.Primary
-import hackathon.picky.core.model.CommonListItemTest
 import hackathon.picky.core.model.common.CommonListItemTest
 import hackathon.picky.feature.home.component.PolicyDetailContent
 import hackathon.picky.feature.home.model.HomeUiState

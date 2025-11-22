@@ -1,21 +1,23 @@
 package hackathon.picky.core.data.mapper.policiy
 
-import hackathon.picky.core.data.model.policy.PolicyDetailEntity
-import hackathon.picky.core.network.model.response.PolicyDetailData
+import hackathon.picky.core.data.model.policy.PolicyEntity
+import hackathon.picky.core.model.common.Category
+import hackathon.picky.core.network.model.response.PolicyIncomeResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-fun PolicyDetailData.toEntity(): PolicyDetailEntity {
+fun PolicyIncomeResponse.toEntity(): List<PolicyEntity> = this.data.map {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    return PolicyDetailEntity(
-        id = this.id,
-        title = this.title,
-        imgUrl = this.imageUrl,
-        department = this.host,
-        startDate = LocalDate.parse(this.startDate, formatter),
-        closingDate = this.endDate?.let { LocalDate.parse(it, formatter) },
-        eligibility = this.qualifications,
-        description = this.content,
-        bookmarked = this.bookmarked
+
+    PolicyEntity(
+        id = it.id,
+        title = it.title ?: "",
+        category = Category.fromLabel(it.category ?: ""),
+        endDate =  if (!it.always && !it.endDate.isNullOrEmpty()) {
+            LocalDate.parse(it.endDate, formatter)
+        } else null,
+        imageUrl = it.imageUrl ?: "",
+        viewCount = it.viewCount ?: 0,
+
     )
 }

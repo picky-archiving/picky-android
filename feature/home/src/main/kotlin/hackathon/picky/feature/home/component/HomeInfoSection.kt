@@ -43,7 +43,6 @@ import java.time.LocalDateTime
 @Composable
 fun HomeInfoSection(
     category: Category? = null,
-    description: String? = null,
     list: List<CommonListItem>,
     onClickDetail: (Int) -> Unit,
     onClickList: (Category) -> Unit,
@@ -54,7 +53,7 @@ fun HomeInfoSection(
             .fillMaxWidth()
     ) {
         // 타이틀 영역
-        if (category != null && description != null) {
+        if (category != null) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
@@ -111,7 +110,7 @@ fun HomeInfoSection(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = description,
+                text = category.description,
                 fontFamily = PretendardFontFamily,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
@@ -146,7 +145,6 @@ fun HomeInfoSection(
 fun HomeInfoSectionPrev() {
     HomeInfoSection(
         category = Category.EMPLOYMENT,
-        description = "This is an example description for the info section.",
         list = HomeUiTest.infoSectionList[0].infoList,
         onClickDetail = { },
         onClickList = { },

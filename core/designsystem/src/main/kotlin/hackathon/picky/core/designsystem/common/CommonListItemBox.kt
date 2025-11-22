@@ -26,14 +26,13 @@ import coil.compose.AsyncImage
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Composable
 fun CommonListItemBox(
     id: Int,
     imageUrl: String,
     title: String,
-    closingDate: LocalDate,
+    closingDate: LocalDate?,
     onClickDetail: (Int) -> Unit,
     type: CommonListType = CommonListType.FIX
 ) {
@@ -67,8 +66,8 @@ fun CommonListItemBox(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(4.dp),
-                closingDate = closingDate,
-                isAll = false,
+                closingDate = closingDate ?: LocalDate.now(),
+                isAll = closingDate == null,
             )
         }
 
