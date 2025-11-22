@@ -129,7 +129,7 @@ internal fun MyPageProfileCard(
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = rank,
+                        text = if (rank.isNotEmpty()) rank else "-",
                         fontFamily = PretendardFontFamily,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -137,7 +137,7 @@ internal fun MyPageProfileCard(
                     )
 
                     Text(
-                        text = incomeRange,
+                        text = if (rank.isNotEmpty()) incomeRange else "-",
                         fontFamily = PretendardFontFamily,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,

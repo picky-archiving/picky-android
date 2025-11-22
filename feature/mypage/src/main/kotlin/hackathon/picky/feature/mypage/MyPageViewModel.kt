@@ -29,7 +29,7 @@ class MyPageViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<MyPageUiState>(
         MyPageUiState.Main(
-            rank = "1분위",
+            rank = "",  // 초기값을 빈 문자열로 변경
             showRankBottomSheet = false,
             bookmarkedPolicies = emptyList(),
             isLoading = true
@@ -43,16 +43,17 @@ class MyPageViewModel @Inject constructor(
     }
 
     private fun loadUserIncomeBracket() = viewModelScope.launch {
-        val currentState = _uiState.value
-        if (currentState !is MyPageUiState.Main) return@launch
-
         userRepository.getUserIncomeBracket(userId = 1)
             .onSuccess { incomeBracket ->
-                _uiState.update {
-                    currentState.copy(
-                        rank = "${incomeBracket}분위",
-                        errorMessage = null
-                    )
+                _uiState.update { currentState ->
+                    if (currentState is MyPageUiState.Main) {
+                        currentState.copy(
+                            rank = "${incomeBracket}분위",
+                            errorMessage = null
+                        )
+                    } else {
+                        currentState
+                    }
                 }
             }
             .onFailure { error ->
@@ -64,28 +65,33 @@ class MyPageViewModel @Inject constructor(
                         "소득분위 조회에 실패했습니다"
                 }
 
-                _uiState.update {
-                    currentState.copy(
-                        isLoading = false,
-                        errorMessage = errorMessage
-                    )
+                _uiState.update { currentState ->
+                    if (currentState is MyPageUiState.Main) {
+                        currentState.copy(
+                            isLoading = false,
+                            errorMessage = errorMessage
+                        )
+                    } else {
+                        currentState
+                    }
                 }
             }
     }
 
     private fun loadBookmarkedPolicies() = viewModelScope.launch {
-        val currentState = _uiState.value
-        if (currentState !is MyPageUiState.Main) return@launch
-
         policyRepository.getBookmarkedPolicies(page = 0, size = 20)
             .onSuccess { bookmarkedData ->
                 val bookmarkedPolicies = bookmarkedData.content.map { it.toCommonListItem() }
-                _uiState.update {
-                    currentState.copy(
-                        bookmarkedPolicies = bookmarkedPolicies,
-                        isLoading = false,
-                        errorMessage = null
-                    )
+                _uiState.update { currentState ->
+                    if (currentState is MyPageUiState.Main) {
+                        currentState.copy(
+                            bookmarkedPolicies = bookmarkedPolicies,
+                            isLoading = false,
+                            errorMessage = null
+                        )
+                    } else {
+                        currentState
+                    }
                 }
             }
             .onFailure { error ->
@@ -100,26 +106,36 @@ class MyPageViewModel @Inject constructor(
                         "북마크된 정책 조회에 실패했습니다"
                 }
 
-                _uiState.update {
-                    currentState.copy(
-                        isLoading = false,
-                        errorMessage = errorMessage
-                    )
+                _uiState.update { currentState ->
+                    if (currentState is MyPageUiState.Main) {
+                        currentState.copy(
+                            isLoading = false,
+                            errorMessage = errorMessage
+                        )
+                    } else {
+                        currentState
+                    }
                 }
             }
     }
 
     fun onEditClick() {
-        val currentState = _uiState.value
-        if (currentState is MyPageUiState.Main) {
-            _uiState.update { currentState.copy(showRankBottomSheet = true) }
+        _uiState.update { currentState ->
+            if (currentState is MyPageUiState.Main) {
+                currentState.copy(showRankBottomSheet = true)
+            } else {
+                currentState
+            }
         }
     }
 
     fun dismissBottomSheet() {
-        val currentState = _uiState.value
-        if (currentState is MyPageUiState.Main) {
-            _uiState.update { currentState.copy(showRankBottomSheet = false) }
+        _uiState.update { currentState ->
+            if (currentState is MyPageUiState.Main) {
+                currentState.copy(showRankBottomSheet = false)
+            } else {
+                currentState
+            }
         }
     }
 
@@ -167,9 +183,12 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun clearErrorMessage() {
-        val currentState = _uiState.value
-        if (currentState is MyPageUiState.Main) {
-            _uiState.update { currentState.copy(errorMessage = null) }
+        _uiState.update { currentState ->
+            if (currentState is MyPageUiState.Main) {
+                currentState.copy(errorMessage = null)
+            } else {
+                currentState
+            }
         }
     }
 
