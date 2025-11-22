@@ -1,5 +1,6 @@
 package hackathon.picky.core.network.api
 
+import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
@@ -36,4 +37,15 @@ interface PolicyApi {
     suspend fun getPolicyDetail(
         @Path("policyId") policyId: Long
     ): Response<PolicyDetailResponse>
+
+    /**
+     * 북마크된 정책 목록 조회
+     * @param page 페이지 번호 (0-base, default = 0)
+     * @param size 페이지 크기 (default = 20)
+     */
+    @GET("api/post/bookmarked")
+    suspend fun getBookmarkedPolicies(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20
+    ): Response<BookmarkedPolicyResponse>
 }
