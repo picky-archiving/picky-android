@@ -9,4 +9,11 @@ interface UserDatasource {
      * @param userId 사용자 식별 ID
      */
     suspend fun getUserIncomeBracket(userId: Long): ApiResponse<UserIncomeBracketResponse>
+
+    /**
+     * 사용자 소득분위 수정
+     * @param userId 사용자 식별 ID
+     * @param incomeBracket 변경할 소득분위
+     */
+    suspend fun updateUserIncomeBracket(userId: Long, incomeBracket: Int): ApiResponse<UserIncomeBracketResponse>
 }
