@@ -1,22 +1,27 @@
-package hackathon.picky.feature.home
+package hackathon.picky.feature.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -26,12 +31,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,10 +40,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.designsystem.R
 import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.core.designsystem.theme.Dimens
@@ -53,42 +53,14 @@ import hackathon.picky.core.designsystem.theme.Gray800
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import hackathon.picky.core.designsystem.theme.Primary
 import hackathon.picky.core.designsystem.theme.Secondary
+import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.PolicyDetail
-import hackathon.picky.feature.home.model.PolicyDetailUiState
 
-@Composable
-fun PolicyDetailRoute(
-    onBackClick: () -> Unit,
-    viewModel: PolicyDetailViewModel = viewModel()
-) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    when (uiState) {
-        is PolicyDetailUiState.Loading -> {
-            LoadingScreen()
-        }
-
-        is PolicyDetailUiState.Success -> {
-            PolicyDetailScreen(
-                uiState = uiState as PolicyDetailUiState.Success,
-                onBackClick = onBackClick,
-                onBookmarkClick = { viewModel.toggleBookmark() }
-            )
-        }
-
-        is PolicyDetailUiState.Error -> {
-            ErrorScreen(
-                message = (uiState as PolicyDetailUiState.Error).message,
-                onBackClick = onBackClick
-            )
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PolicyDetailScreen(
-    uiState: PolicyDetailUiState.Success,
+internal fun PolicyDetailContent(
+    uiState: HomeUiState.Detail,
     onBackClick: () -> Unit,
     onBookmarkClick: () -> Unit
 ) {
@@ -330,8 +302,12 @@ private fun BottomActionBar(
                     shape = RoundedCornerShape(8.dp)
                 )
                 .clip(RoundedCornerShape(8.dp))
-                .background(Gray100)
-                .clickable { onBookmarkClick() },
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClick = { onBookmarkClick() }
+                )
+                .background(Gray100),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -351,8 +327,12 @@ private fun BottomActionBar(
                 .weight(1f)
                 .height(48.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(Primary)
-                .clickable { /* TODO: 신청하기 동작 */ },
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClick = { }
+                )
+                .background(Primary),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -381,16 +361,17 @@ private val previewPolicyDetail = PolicyDetail(
             "청년의 자산형성과 중소기업의 인력 안정화를 동시에 지원하는 정책입니다."
 )
 
-private val previewUiState = PolicyDetailUiState.Success(
+private val previewUiState = HomeUiState.Detail(
     policyDetail = previewPolicyDetail,
     daysRemaining = 13,
-    isBookmarked = false
+    isBookmarked = false,
+    previousUiState = HomeUiState.Init,
 )
 
 @Preview(showBackground = true)
 @Composable
-private fun PolicyDetailScreenPreview() {
-    PolicyDetailScreen(
+private fun PolicyDetailContentPreview() {
+    PolicyDetailContent(
         uiState = previewUiState,
         onBackClick = {},
         onBookmarkClick = {}
@@ -399,8 +380,8 @@ private fun PolicyDetailScreenPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun PolicyDetailScreenBookmarkedPreview() {
-    PolicyDetailScreen(
+private fun PolicyDetailContentBookmarkedPreview() {
+    PolicyDetailContent(
         uiState = previewUiState.copy(isBookmarked = true),
         onBackClick = {},
         onBookmarkClick = {}

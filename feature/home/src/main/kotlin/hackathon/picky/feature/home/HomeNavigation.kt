@@ -23,23 +23,11 @@ fun NavController.navigatePolicyDetail(
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
     navigateMy: () -> Unit,
-    navigatePolicyDetail: (String) -> Unit
 ) {
     composable<MainTabRoute.Home> {
         HomeRoute(
             padding = padding,
-            navigateMy = navigateMy,
-            navigatePolicyDetail = navigatePolicyDetail
-        )
-    }
-}
-
-fun NavGraphBuilder.policyDetailNavGraph(
-    onBackClick: () -> Unit
-) {
-    composable<Route.PolicyDetail> {
-        PolicyDetailRoute(
-            onBackClick = onBackClick
+            navigateMy = navigateMy
         )
     }
 }

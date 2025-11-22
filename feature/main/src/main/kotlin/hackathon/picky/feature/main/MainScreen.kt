@@ -66,7 +66,7 @@ private fun MainScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding(), // ✅ 유지
-                visible = navigator.shouldShowBottomBar(),
+                visible = false,//navigator.shouldShowBottomBar(),
                 tabs = MainTab.entries.toPersistentList(),
                 currentTab = navigator.currentTab,
                 onTabSelected = { navigator.navigate(it) }

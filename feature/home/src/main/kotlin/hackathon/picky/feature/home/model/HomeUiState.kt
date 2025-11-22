@@ -1,17 +1,22 @@
 package hackathon.picky.feature.home.model
 
-import hackathon.picky.feature.home.model.HomeSectionListItem
-
 sealed class HomeUiState {
-    data class Success(
+    data class Main(
         val infoSectionList: List<HomeSectionListItem>,
         val topBannerList: List<Int> // url 반환 시 String으로, HomeTopBanner도 그에 맞게 변경
+    ) : HomeUiState()
+
+    data class Detail(
+        val previousUiState: HomeUiState,
+        val policyDetail: PolicyDetail,
+        val daysRemaining: Int,
+        val isBookmarked: Boolean = false
     ) : HomeUiState()
 
     data object Init : HomeUiState()
 }
 
-val HomeUiTest = HomeUiState.Success(
+val HomeUiTest = HomeUiState.Main(
     infoSectionList = listOf(
         HomeSectionListItem(
             title = "오늘의 픽!",
@@ -39,4 +44,25 @@ val HomeUiTest = HomeUiState.Success(
         android.R.drawable.ic_menu_camera,
         android.R.drawable.ic_menu_camera
     )
+)
+
+val policyDetailData = PolicyDetail(
+    id = "D-13",
+    title = "정책명 예시입니다. 길어질 시 예시입니다. 길어질 시 예시입니다.",
+    department = "주관 부처",
+    applicationPeriod = "2024.09.07 ~ 2024.09.28",
+    eligibility = listOf(
+        "백엔드 개발자",
+        "프론트엔드 개발자",
+        "프로덕트디자이너플랫폼하는대학에학중인대학..."
+    ),
+    description = """정책 예시가 들어갑니다. 정책 예시가 들어갑니다.
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.""".trimIndent()
 )
