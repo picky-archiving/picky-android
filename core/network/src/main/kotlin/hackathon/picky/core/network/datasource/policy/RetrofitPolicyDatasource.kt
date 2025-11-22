@@ -3,6 +3,7 @@ package hackathon.picky.core.network.datasource.policy
 import hackathon.picky.core.network.api.PolicyApi
 import hackathon.picky.core.network.model.ApiResponse
 import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
+import hackathon.picky.core.network.model.response.BookmarkToggleResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
@@ -31,5 +32,13 @@ class RetrofitPolicyDatasource @Inject constructor(
         size: Int
     ): ApiResponse<BookmarkedPolicyResponse> {
         return runRemote { policyApi.getBookmarkedPolicies(page, size) }
+    }
+
+    override suspend fun addBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse> {
+        return runRemote { policyApi.addBookmark(policyId) }
+    }
+
+    override suspend fun removeBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse> {
+        return runRemote { policyApi.removeBookmark(policyId) }
     }
 }
