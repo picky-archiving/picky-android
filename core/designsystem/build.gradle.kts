@@ -12,4 +12,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics.android)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.runtime.android)
+
+    // Preview
+    implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling)
 }

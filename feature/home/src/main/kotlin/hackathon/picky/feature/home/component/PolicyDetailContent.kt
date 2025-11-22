@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.designsystem.R
+import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.core.designsystem.theme.Dimens
 import hackathon.picky.core.designsystem.theme.Gray100
@@ -65,46 +66,15 @@ internal fun PolicyDetailContent(
     onBookmarkClick: () -> Unit
 ) {
     val policyDetail = uiState.policyDetail
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = policyDetail.title,
-                        fontFamily = PretendardFontFamily,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Gray800
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.back),
-                            contentDescription = "뒤로가기",
-                            tint = AppColors.Black
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = AppColors.White
-                )
-            )
-        },
-        bottomBar = {
-            BottomActionBar(
-                isBookmarked = uiState.isBookmarked,
-                onBookmarkClick = onBookmarkClick
-            )
-        },
-        containerColor = AppColors.White
-    ) { paddingValues ->
+    Column(
+    ) {
+        BackTopBar(
+            title = policyDetail.title,
+            onClickBack = onBackClick
+        )
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+                .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
             // 이미지 영역 (체크보드 패턴 - 실제로는 이미지가 들어갈 자리)
@@ -121,6 +91,7 @@ internal fun PolicyDetailContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .padding(horizontal = Dimens.Space20)
             ) {
                 // D-13 태그 (박스 형태)
@@ -196,6 +167,11 @@ internal fun PolicyDetailContent(
                 )
             }
         }
+
+        BottomActionBar(
+            isBookmarked = uiState.isBookmarked,
+            onBookmarkClick = onBookmarkClick
+        )
     }
 }
 
@@ -287,7 +263,6 @@ private fun BottomActionBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(AppColors.White)
-            .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 14.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically

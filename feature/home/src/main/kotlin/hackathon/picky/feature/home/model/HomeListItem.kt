@@ -13,6 +13,7 @@ data class HomeSectionListItem(
 )
 
 data class HomeListItem(
+    val id: Int,
     val title: String,
     @DrawableRes val imageRes: Int,
     val closingDate: LocalDateTime // null일 경우 상시
