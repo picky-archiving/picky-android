@@ -7,32 +7,28 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.designsystem.R
 import hackathon.picky.core.designsystem.common.BackTopBar
+import hackathon.picky.core.designsystem.common.PickySnackbar
+import kotlinx.coroutines.launch
 import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.core.designsystem.theme.Dimens
 import hackathon.picky.core.designsystem.theme.Gray100
@@ -60,7 +58,7 @@ import hackathon.picky.feature.home.model.PolicyDetail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PolicyDetailContent(
+fun PolicyDetailContent(
     uiState: HomeUiState.Detail,
     onBackClick: () -> Unit,
     onBookmarkClick: () -> Unit
@@ -147,24 +145,29 @@ internal fun PolicyDetailContent(
                 SectionTitle(title = "신청 자격")
                 Spacer(modifier = Modifier.height(Dimens.Space12))
 
-                policyDetail.eligibility.forEach { eligibility ->
-                    EligibilityChip(text = eligibility)
-                    Spacer(modifier = Modifier.height(Dimens.Space8))
-                }
+                EligibilityChipGroup(eligibility = policyDetail.eligibility)
 
                 Spacer(modifier = Modifier.height(Dimens.Space24))
 
                 // 정책 설명
                 SectionTitle(title = "정책 설명")
                 Spacer(modifier = Modifier.height(Dimens.Space12))
-                Text(
-                    text = policyDetail.description,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = AppColors.Black,
-                    lineHeight = 22.sp,
-                    modifier = Modifier.padding(bottom = Dimens.Space32)
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Gray100)
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = policyDetail.description,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = AppColors.Black,
+                        lineHeight = 22.sp
+                    )
+                }
+                Spacer(modifier = Modifier.height(Dimens.Space32))
             }
         }
 
@@ -186,13 +189,27 @@ private fun SectionTitle(title: String) {
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun EligibilityChipGroup(eligibility: List<String>) {
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        eligibility.forEach { text ->
+            EligibilityChip(text = text)
+        }
+    }
+}
+
 @Composable
 private fun EligibilityChip(text: String) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(24.dp))
             .background(Gray100)
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
     ) {
         Text(
             text = text,
