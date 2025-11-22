@@ -59,7 +59,7 @@ class HomeViewModel @Inject constructor(
                                 closingDate = data.closingDate,
                                 eligibility = data.eligibility,
                                 description = data.description,
-                                webUrl = TODO(),
+                                webUrl = data.webUrl,
                             ),
                             isBookmarked = data.bookmarked
                         )
