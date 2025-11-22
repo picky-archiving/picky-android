@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import hackathon.picky.feature.auth.authNavGraph
 import hackathon.picky.feature.home.homeNavGraph
 import hackathon.picky.feature.main.MainNavigator
-g
+
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,
