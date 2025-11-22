@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import hackathon.picky.core.designsystem.common.CommonListItemBox
 import hackathon.picky.core.designsystem.common.CommonListType
-import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.common.CommonListItem
 
 
 @Composable

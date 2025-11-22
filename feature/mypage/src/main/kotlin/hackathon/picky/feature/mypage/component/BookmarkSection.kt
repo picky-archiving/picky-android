@@ -22,7 +22,7 @@ import hackathon.picky.core.designsystem.common.CommonListType
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import hackathon.picky.core.designsystem.theme.Primary
-import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.common.CommonListItem
 
 @Composable
 internal fun BookmarkSection(

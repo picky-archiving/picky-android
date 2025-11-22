@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Composable
@@ -32,7 +33,7 @@ fun CommonListItemBox(
     id: Int,
     imageUrl: String,
     title: String,
-    closingDate: LocalDateTime,
+    closingDate: LocalDate,
     onClickDetail: (Int) -> Unit,
     type: CommonListType = CommonListType.FIX
 ) {
@@ -92,7 +93,7 @@ fun CommonListItemBoxPreview() {
         id = 1,
         imageUrl = "https://sosal.kr/1144?pidx=0",
         title = "친환경 제품 사용하고 계신가요?",
-        closingDate = LocalDateTime.now().plusDays(5),
+        closingDate = LocalDate.now().plusDays(5),
         onClickDetail = {}
     )
 }

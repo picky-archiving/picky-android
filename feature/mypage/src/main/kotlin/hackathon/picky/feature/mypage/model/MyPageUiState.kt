@@ -1,6 +1,6 @@
 package hackathon.picky.feature.mypage.model
 
-import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.feature.home.model.PolicyDetail
 
 sealed class MyPageUiState {

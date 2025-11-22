@@ -1,6 +1,6 @@
 package hackathon.picky.feature.search
 
-import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.common.CommonListItem
 
 sealed class SearchUiState {
     data object Init : SearchUiState()

@@ -15,12 +15,14 @@ fun NavGraphBuilder.myPageNavGraph(
     padding: PaddingValues,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
+    onClickDetail: (Int) -> Unit
 ) {
     composable<Route.MyPage> {
         MyPageRoute(
             padding = padding,
             onBackClick = onBackClick,
-            onSearchClick = onSearchClick
+            onSearchClick = onSearchClick,
+            onClickDetail = onClickDetail
         )
     }
 }

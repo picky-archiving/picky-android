@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hackathon.picky.core.data.repo.PolicyRepository
-import hackathon.picky.core.model.CommonListItemTest
+import hackathon.picky.core.model.common.CommonListItemTest
 import hackathon.picky.feature.home.model.PolicyDetail
 import hackathon.picky.feature.mypage.model.MyPageUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,39 +66,6 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun clickDetail(policyId: Int) = viewModelScope.launch {
-        val previousState = _uiState.value
-
-        policyRepository.getPolicyDetail(policyId.toLong())
-            .onSuccess { policyData ->
-                // API 응답을 PolicyDetail 모델로 변환
-                val policyDetail = PolicyDetail(
-                    id = policyData.id.toString(),
-                    title = policyData.title,
-                    department = policyData.host,
-                    applicationPeriod = "${policyData.startDate} ~ ${policyData.endDate ?: "상시"}",
-                    eligibility = policyData.qualifications,
-                    description = policyData.content
-                )
-
-                val daysRemaining = policyData.endDate?.let {
-                    calculateDaysRemaining(it)
-                } ?: -1  // 상시모집인 경우 -1
-
-                _uiState.update {
-                    MyPageUiState.Detail(
-                        previousUiState = previousState,
-                        policyDetail = policyDetail,
-                        daysRemaining = daysRemaining,
-                        isBookmarked = policyData.bookmarked
-                    )
-                }
-            }
-            .onFailure { error ->
-                // 에러 처리 - 필요시 에러 상태 추가
-                // TODO: 에러 상태 표시
-            }
-    }
 
     fun toggleBookmark() {
         val currentState = _uiState.value

@@ -52,7 +52,7 @@ internal object NetworkModule {
     fun provideRetrofit(json: Json, okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl("http://54.180.92.121:8080/")
             .addConverterFactory(json.asConverterFactory(TYPE_JSON.toMediaType()))
             .build()
 
