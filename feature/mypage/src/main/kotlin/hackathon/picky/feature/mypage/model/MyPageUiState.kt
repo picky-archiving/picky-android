@@ -14,11 +14,4 @@ sealed class MyPageUiState {
         val incomeRange: String
             get() = IncomeRangeMapper.getIncomeRange(rank)
     }
-
-    data class Detail(
-        val previousUiState: MyPageUiState,
-        val policyDetail: PolicyDetail,
-        val daysRemaining: Int,
-        val isBookmarked: Boolean = false
-    ) : MyPageUiState()
 }

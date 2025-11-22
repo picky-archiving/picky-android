@@ -194,36 +194,6 @@ class MyPageViewModel @Inject constructor(
     }
 
 
-    fun toggleBookmark() {
-        val currentState = _uiState.value
-        if (currentState is MyPageUiState.Detail) {
-            _uiState.value = currentState.copy(
-                isBookmarked = !currentState.isBookmarked
-            )
-        }
-    }
-
-    private fun calculateDaysRemaining(endDate: String): Int {
-        return try {
-            // API 응답 형식: "2025-05-31"
-            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
-            val end = formatter.parse(endDate) ?: return 0
-            val today = Calendar.getInstance().time
-            val diffInMillis = end.time - today.time
-            TimeUnit.MILLISECONDS.toDays(diffInMillis).toInt()
-        } catch (e: Exception) {
-            0
-        }
-    }
-
-    fun goBackToMain() {
-        val state = _uiState.value
-        if (state is MyPageUiState.Detail) {
-            _uiState.value = state.previousUiState
-        }
-    }
-
     /**
      * BookmarkedPolicy를 CommonListItem으로 변환
      */

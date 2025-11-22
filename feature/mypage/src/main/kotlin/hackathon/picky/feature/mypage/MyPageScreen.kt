@@ -29,8 +29,6 @@ import hackathon.picky.core.designsystem.common.PickySnackbar
 import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.core.designsystem.theme.Primary
 import hackathon.picky.core.model.common.CommonListItemTest
-import hackathon.picky.feature.home.component.PolicyDetailContent
-import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.mypage.component.BookmarkSection
 import hackathon.picky.feature.mypage.component.MyPageProfileCard
 import hackathon.picky.feature.mypage.component.RankSelectionBottomSheet
@@ -42,17 +40,12 @@ fun MyPageRoute(
     onBackClick: () -> Unit,
     viewModel: MyPageViewModel = hiltViewModel(),
     onSearchClick: () -> Unit,
-    onClickDetail: (Int) -> Unit
+    navigateDetail: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val handleBackClick: () -> Unit = {
         when (uiState) {
-            is MyPageUiState.Detail -> {
-                // Detail 상태에서는 Main으로 돌아감
-                viewModel.goBackToMain()
-            }
-
             else -> {
                 // Main 상태에서는 Home으로 이동
                 onBackClick()
@@ -70,8 +63,7 @@ fun MyPageRoute(
         onBackClick = handleBackClick,
         onSearchClick = onSearchClick,
         onEditClick = viewModel::onEditClick,
-        onClickDetail = onClickDetail,
-        onBookmarkClick = viewModel::toggleBookmark,
+        onClickDetail = navigateDetail,
         onDismissBottomSheet = viewModel::dismissBottomSheet,
         onRankSelected = viewModel::updateRank,
         onClearError = viewModel::clearErrorMessage
@@ -86,7 +78,6 @@ private fun MyPageScreen(
     onSearchClick: () -> Unit,
     onEditClick: () -> Unit,
     onClickDetail: (Int) -> Unit,
-    onBookmarkClick: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onRankSelected: (String) -> Unit,
     onClearError: () -> Unit
@@ -164,20 +155,7 @@ private fun MyPageScreen(
                 }
             }
 
-            is MyPageUiState.Detail -> {
-                // PolicyDetailContent를 HomeUiState.Detail 형태로 변환
-                val homeDetailState = HomeUiState.Detail(
-                    previousUiState = HomeUiState.Init,
-                    policyDetail = uiState.policyDetail,
-                    isBookmarked = uiState.isBookmarked
-                )
-
-                PolicyDetailContent(
-                    uiState = homeDetailState,
-                    onBackClick = onBackClick,
-                    onBookmarkClick = onBookmarkClick
-                )
-            }
+           else -> {}
         }
         }
 
@@ -206,7 +184,6 @@ private fun MyPageScreenPreview() {
         onSearchClick = {},
         onEditClick = {},
         onClickDetail = { _ -> },
-        onBookmarkClick = {},
         onDismissBottomSheet = {},
         onRankSelected = {},
         onClearError = {}

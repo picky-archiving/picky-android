@@ -11,5 +11,6 @@ data class PolicyDetailEntity(
     val closingDate: LocalDate?,  // nullable - 상시 모집이면 null
     val eligibility: List<String>,
     val description: String,
-    val bookmarked: Boolean
+    val bookmarked: Boolean,
+    val webUrl: String
 )

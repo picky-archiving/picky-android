@@ -1,5 +1,7 @@
 package hackathon.picky.feature.home
 
+import android.app.Activity
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,6 +9,7 @@ import hackathon.picky.core.data.repo.PolicyRepository
 import hackathon.picky.core.model.common.Category
 import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.core.model.common.SearchFilter
+import hackathon.picky.core.navigation.Route
 import hackathon.picky.feature.home.model.HomeSectionListItem
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
@@ -41,7 +44,7 @@ class HomeViewModel @Inject constructor(
     )
 
     fun init(policyId: Int?) = viewModelScope.launch { // 초기 화면 설정
-        if(policyId != null) {
+        if (policyId != null) {
             policyRepository.getPolicyDetail(policyId.toLong())
                 .onSuccess { data ->
                     _uiState.update {
@@ -55,7 +58,8 @@ class HomeViewModel @Inject constructor(
                                 startDate = data.startDate,
                                 closingDate = data.closingDate,
                                 eligibility = data.eligibility,
-                                description = data.description
+                                description = data.description,
+                                webUrl = TODO(),
                             ),
                             isBookmarked = data.bookmarked
                         )
@@ -119,6 +123,15 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun onClickSubmit() = viewModelScope.launch {
+        _uiState.update { prev ->
+            HomeUiState.Web(
+                previousUiState = prev,
+                webUrl = (prev as HomeUiState.Detail).policyDetail.webUrl
+            )
+        }
+    }
+
 
     fun clickDetail(policyId: Int) = viewModelScope.launch {
         policyRepository.getPolicyDetail(policyId.toLong())
@@ -134,7 +147,8 @@ class HomeViewModel @Inject constructor(
                             startDate = data.startDate,
                             closingDate = data.closingDate,
                             eligibility = data.eligibility,
-                            description = data.description
+                            description = data.description,
+                            webUrl = data.webUrl
                         ),
                         isBookmarked = data.bookmarked
                     )
@@ -266,7 +280,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun goBack(onBackPressed: () -> Unit) {
+    fun goBack(onBackPressed: () -> Unit, context: Context) {
         when (val state = _uiState.value) {
             is HomeUiState.Detail -> {
                 (_uiState.value as HomeUiState.Detail).let {
@@ -278,6 +292,14 @@ class HomeViewModel @Inject constructor(
 
             is HomeUiState.ListScreen -> {
                 _uiState.value = state.previousUiState
+            }
+
+            is HomeUiState.Web -> {
+                _uiState.value = state.previousUiState
+            }
+
+            is HomeUiState.Main -> {
+                (context as? Activity)?.finish()
             }
 
             else -> {

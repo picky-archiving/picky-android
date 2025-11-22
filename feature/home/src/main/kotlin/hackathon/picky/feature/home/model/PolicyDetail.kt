@@ -10,5 +10,6 @@ data class PolicyDetail(
     val startDate: LocalDate?,  // nullable - 상시 모집이면 null
     val closingDate: LocalDate?,  // nullable - 상시 모집이면 null
     val eligibility: List<String>,
-    val description: String
+    val description: String,
+    val webUrl: String
 )
