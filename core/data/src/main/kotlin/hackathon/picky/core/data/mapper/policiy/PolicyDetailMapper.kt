@@ -13,7 +13,9 @@ fun PolicyDetailData.toEntity(): PolicyDetailEntity {
         imgUrl = this.imageUrl,
         department = this.host,
         startDate = LocalDate.parse(this.startDate, formatter),
-        closingDate = this.endDate?.let { LocalDate.parse(it, formatter) },
+        closingDate = if (!this.always) {
+            LocalDate.parse(this.endDate, formatter)
+        } else null,
         eligibility = this.qualifications,
         description = this.content,
         bookmarked = this.bookmarked

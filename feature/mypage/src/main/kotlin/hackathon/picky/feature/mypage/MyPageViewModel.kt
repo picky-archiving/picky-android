@@ -5,9 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hackathon.picky.core.data.repo.PolicyRepository
 import hackathon.picky.core.data.repo.UserRepository
-import hackathon.picky.core.model.CommonListItemTest
 import hackathon.picky.core.model.common.CommonListItemTest
-import hackathon.picky.feature.home.model.PolicyDetail
 import hackathon.picky.feature.mypage.model.MyPageUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

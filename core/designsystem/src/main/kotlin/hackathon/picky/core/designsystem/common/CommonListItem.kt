@@ -33,7 +33,7 @@ fun CommonListItemBox(
     id: Int,
     imageUrl: String,
     title: String,
-    closingDate: LocalDate,
+    closingDate: LocalDate?,
     onClickDetail: (Int) -> Unit,
     type: CommonListType = CommonListType.FIX
 ) {
@@ -67,8 +67,8 @@ fun CommonListItemBox(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(4.dp),
-                closingDate = closingDate,
-                isAll = false,
+                closingDate = closingDate ?: LocalDate.now(),
+                isAll = closingDate == null,
             )
         }
 

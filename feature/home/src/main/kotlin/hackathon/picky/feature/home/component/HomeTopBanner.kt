@@ -70,7 +70,7 @@ fun HomeTopBanner(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = "MD PICK 금주의 공고",
+                text = Category.TOP.label,
                 fontFamily = PretendardFontFamily,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,

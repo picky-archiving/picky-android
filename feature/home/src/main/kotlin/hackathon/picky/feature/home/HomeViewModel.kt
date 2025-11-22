@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hackathon.picky.core.data.repo.PolicyRepository
 import hackathon.picky.core.model.common.Category
+import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.core.model.common.SearchFilter
+import hackathon.picky.feature.home.model.HomeSectionListItem
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
 import hackathon.picky.feature.home.model.PolicyDetail
@@ -30,7 +32,7 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     fun init(policyId: Int?) = viewModelScope.launch { // 초기 화면 설정
-        if(policyId != null) {
+        if (policyId != null) {
             policyRepository.getPolicyDetail(1)
                 .onSuccess { data ->
                     _uiState.update {
@@ -55,14 +57,51 @@ class HomeViewModel @Inject constructor(
                         HomeUiTest
                     }
                 }
-        } else _uiState.update { HomeUiTest }
+        } else {
+            policyRepository.getHomeData().onSuccess { data ->
+                val data =
+                    _uiState.update {
+                        HomeUiState.Main(
+                            infoSectionList = data.categories.map {
+                                HomeSectionListItem(
+                                    category = it.category,
+                                    infoList = it.policies.map {
+                                        CommonListItem(
+                                            id = it.id.toInt(),
+                                            title = it.title,
+                                            imageUrl = it.imageUrl,
+                                            closingDate = it.endDate,
+                                        )
+                                    }
+                                )
+                            },
+                            topBannerList = data.incomePolicies.take(3).map {
+                                CommonListItem(
+                                    id = it.id.toInt(),
+                                    title = it.title,
+                                    imageUrl = it.imageUrl,
+                                    closingDate = it.endDate,
+                                )
+                            },
+                            topList = data.incomePolicies.take(3).map {
+                                CommonListItem(
+                                    id = it.id.toInt(),
+                                    title = it.title,
+                                    imageUrl = it.imageUrl,
+                                    closingDate = it.endDate,
+                                )
+                            }
+                        )
+                    }
+            }.onFailure { }
+        }
     }
 
 
     fun clickDetail(policyId: Int) = viewModelScope.launch {
         policyRepository.getPolicyDetail(policyId.toLong())
             .onSuccess { data ->
-                _uiState.update { prev->
+                _uiState.update { prev ->
                     HomeUiState.Detail(
                         previousUiState = prev,
                         policyDetail = PolicyDetail(

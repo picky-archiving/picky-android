@@ -1,5 +1,6 @@
 package hackathon.picky.core.data.repo
 
+import hackathon.picky.core.data.model.policy.HomeDataEntity
 import hackathon.picky.core.network.model.response.HomeData
 import hackathon.picky.core.network.model.response.PolicyDetailData
 import hackathon.picky.core.network.model.response.PolicyPageData
@@ -10,7 +11,7 @@ interface PolicyRepository {
      * 메인 화면 데이터 조회
      * @return Result<HomeData> 성공 시 홈 데이터, 실패 시 에러
      */
-    suspend fun getHomeData(): Result<HomeData>
+    suspend fun getHomeData(): Result<HomeDataEntity>
 
     /**
      * 전체 게시물 목록 조회

@@ -7,7 +7,7 @@ data class CommonListItem (
     val id: Int,
     val title: String,
     val imageUrl: String,
-    val closingDate: LocalDate // null일 경우 상시
+    val closingDate: LocalDate? // null일 경우 상시
 )
 
 val CommonListItemTest = CommonListItem(
