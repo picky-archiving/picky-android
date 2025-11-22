@@ -7,7 +7,9 @@ sealed class MyPageUiState {
     data class Main(
         val rank: String = "1분위",
         val showRankBottomSheet: Boolean = false,
-        val bookmarkedPolicies: List<CommonListItem> = emptyList()
+        val bookmarkedPolicies: List<CommonListItem> = emptyList(),
+        val errorMessage: String? = null,
+        val isLoading: Boolean = false
     ) : MyPageUiState() {
         val incomeRange: String
             get() = IncomeRangeMapper.getIncomeRange(rank)

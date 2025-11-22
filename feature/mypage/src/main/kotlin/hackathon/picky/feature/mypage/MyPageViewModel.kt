@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hackathon.picky.core.data.repo.PolicyRepository
+import hackathon.picky.core.data.repo.UserRepository
+import hackathon.picky.core.model.CommonListItemTest
 import hackathon.picky.core.model.common.CommonListItemTest
 import hackathon.picky.feature.home.model.PolicyDetail
 import hackathon.picky.feature.mypage.model.MyPageUiState
@@ -20,11 +22,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val policyRepository: PolicyRepository
+    private val policyRepository: PolicyRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<MyPageUiState>(
         MyPageUiState.Main(
-            rank = "3분위",
+            rank = "1분위",
             showRankBottomSheet = false,
             bookmarkedPolicies = listOf(
                 CommonListItemTest,
@@ -35,10 +38,39 @@ class MyPageViewModel @Inject constructor(
                 CommonListItemTest,
                 CommonListItemTest,
                 CommonListItemTest,
-            )
+            ),
+            isLoading = true
         )
     )
     val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
+
+    init {
+        loadUserIncomeBracket()
+    }
+
+    private fun loadUserIncomeBracket() = viewModelScope.launch {
+        val currentState = _uiState.value
+        if (currentState !is MyPageUiState.Main) return@launch
+
+        userRepository.getUserIncomeBracket(userId = 1)
+            .onSuccess { incomeBracket ->
+                _uiState.update {
+                    currentState.copy(
+                        rank = "${incomeBracket}분위",
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
+            }
+            .onFailure { error ->
+                _uiState.update {
+                    currentState.copy(
+                        isLoading = false,
+                        errorMessage = "소득분위 조회에 실패했습니다"
+                    )
+                }
+            }
+    }
 
     fun onEditClick() {
         val currentState = _uiState.value
@@ -54,15 +86,45 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun updateRank(rank: String) {
+    fun updateRank(rank: String) = viewModelScope.launch {
+        val currentState = _uiState.value
+        if (currentState !is MyPageUiState.Main) return@launch
+
+        // 분위 문자열에서 숫자만 추출 (예: "3분위" -> 3)
+        val incomeBracket = rank.replace("분위", "").toIntOrNull() ?: return@launch
+
+        // 바텀시트 닫고 로딩 상태 표시
+        _uiState.update {
+            currentState.copy(
+                showRankBottomSheet = false,
+                isLoading = true
+            )
+        }
+
+        userRepository.updateUserIncomeBracket(userId = 1, incomeBracket = incomeBracket)
+            .onSuccess { updatedIncomeBracket ->
+                _uiState.update {
+                    (it as MyPageUiState.Main).copy(
+                        rank = "${updatedIncomeBracket}분위",
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
+            }
+            .onFailure { error ->
+                _uiState.update {
+                    (it as MyPageUiState.Main).copy(
+                        isLoading = false,
+                        errorMessage = "소득분위 수정에 실패했습니다"
+                    )
+                }
+            }
+    }
+
+    fun clearErrorMessage() {
         val currentState = _uiState.value
         if (currentState is MyPageUiState.Main) {
-            _uiState.update {
-                currentState.copy(
-                    rank = rank,
-                    showRankBottomSheet = false
-                )
-            }
+            _uiState.update { currentState.copy(errorMessage = null) }
         }
     }
 

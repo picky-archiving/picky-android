@@ -6,6 +6,9 @@ import hackathon.picky.core.network.datasource.auth.RetrofitAuthDatasource
 import hackathon.picky.core.network.datasource.policy.FakePolicyDatasource
 import hackathon.picky.core.network.datasource.policy.PolicyDatasource
 import hackathon.picky.core.network.datasource.policy.RetrofitPolicyDatasource
+import hackathon.picky.core.network.datasource.user.FakeUserDatasource
+import hackathon.picky.core.network.datasource.user.RetrofitUserDatasource
+import hackathon.picky.core.network.datasource.user.UserDatasource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -38,6 +41,18 @@ internal abstract class DatasourceModule {
     abstract fun bindPolicyDatasource(
         retrofitPolicyDatasource: RetrofitPolicyDatasource
     ): PolicyDatasource
+
+    @Binds
+    @FakeDataSource
+    abstract fun bindFakeUserDatasource(
+        fakeUserDatasource: FakeUserDatasource
+    ): UserDatasource
+
+    @Binds
+    @RealDataSource
+    abstract fun bindUserDatasource(
+        retrofitUserDatasource: RetrofitUserDatasource
+    ): UserDatasource
 }
 
 @Qualifier
