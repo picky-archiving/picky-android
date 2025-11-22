@@ -53,6 +53,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.designsystem.R
+import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.common.PickySnackbar
 import kotlinx.coroutines.launch
 import hackathon.picky.core.designsystem.theme.AppColors
@@ -76,71 +77,15 @@ internal fun PolicyDetailContent(
     onBookmarkClick: () -> Unit
 ) {
     val policyDetail = uiState.policyDetail
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-    var previousBookmarkState by remember { mutableStateOf(uiState.isBookmarked) }
-    var snackbarMessage by remember { mutableStateOf("") }
-
-    LaunchedEffect(uiState.isBookmarked) {
-        if (uiState.isBookmarked != previousBookmarkState) {
-            previousBookmarkState = uiState.isBookmarked
-            snackbarMessage = if (uiState.isBookmarked) "북마크에 추가됐어요" else "북마크가 제거됐어요"
-            coroutineScope.launch {
-                snackbarHostState.showSnackbar("")
-            }
-        }
-    }
-
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = policyDetail.title,
-                        fontFamily = PretendardFontFamily,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Gray800
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.back),
-                            contentDescription = "뒤로가기",
-                            tint = AppColors.Black
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = AppColors.White
-                )
-            )
-        },
-        bottomBar = {
-            BottomActionBar(
-                isBookmarked = uiState.isBookmarked,
-                onBookmarkClick = onBookmarkClick
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier.padding(bottom = 16.dp)
-            ) {
-                PickySnackbar(
-                    message = snackbarMessage
-                )
-            }
-        },
-        containerColor = AppColors.White
-    ) { paddingValues ->
+    Column(
+    ) {
+        BackTopBar(
+            title = policyDetail.title,
+            onClickBack = onBackClick
+        )
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+                .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
             // 이미지 영역 (체크보드 패턴 - 실제로는 이미지가 들어갈 자리)
@@ -157,6 +102,7 @@ internal fun PolicyDetailContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .padding(horizontal = Dimens.Space20)
             ) {
                 // D-13 태그 (박스 형태)
@@ -237,6 +183,11 @@ internal fun PolicyDetailContent(
                 Spacer(modifier = Modifier.height(Dimens.Space32))
             }
         }
+
+        BottomActionBar(
+            isBookmarked = uiState.isBookmarked,
+            onBookmarkClick = onBookmarkClick
+        )
     }
 }
 
@@ -342,7 +293,6 @@ private fun BottomActionBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(AppColors.White)
-            .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 14.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically

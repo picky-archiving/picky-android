@@ -20,6 +20,8 @@ val Gray500 = Color(0xFF6B7280)
 val Gray800 = Color(0xFF1F2937)
 val Gray900 = Color(0xFF222222)
 
+val Gray900 = Color(0xFF111827)
+
 val Black = Color(0xFF000000)
 val White = Color(0xFFFFFFFF)
 
@@ -28,3 +30,5 @@ val Primary = Color(0xFFF56D17)
 val Secondary = Color(0xFFFEF8F3)
 
 val ValidBox = Color(0xFFFEF8F3)
+
+

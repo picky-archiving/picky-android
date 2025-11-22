@@ -31,6 +31,7 @@ fun MainNavHost(
             homeNavGraph(
                 padding = padding,
                 navigateMy = { },
+                navigateSearch = {},
             )
 
             authNavGraph(
