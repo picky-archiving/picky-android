@@ -69,6 +69,7 @@ fun PolicyDetailContent(
 ) {
     val policyDetail = uiState.policyDetail
     Column(
+        modifier = Modifier.fillMaxSize()
     ) {
         BackTopBar(
             title = policyDetail.title,
@@ -79,7 +80,7 @@ fun PolicyDetailContent(
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
-            // 이미지 영역 (체크보드 패턴 - 실제로는 이미지가 들어갈 자리)
+            // 이미지 영역
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -88,7 +89,7 @@ fun PolicyDetailContent(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(policyDetail.imgUrl)
-                        .crossfade(true) // 부드럽게 로딩
+                        .crossfade(true)
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -102,7 +103,6 @@ fun PolicyDetailContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
                     .padding(horizontal = Dimens.Space20)
             ) {
                 // D-13 태그 (박스 형태)
@@ -138,11 +138,11 @@ fun PolicyDetailContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
                         .height(1.dp)
                         .background(Gray100)
                         .padding(bottom = Dimens.Space20)
                 )
+                Spacer(modifier = Modifier.height(Dimens.Space20))
 
                 // 신청 기간
                 SectionTitle(title = "신청 기간")
@@ -398,9 +398,14 @@ private fun ErrorScreenPreview() {
 
 
 @Composable
-fun ApplicationPeriodText(startDate: LocalDate, endDate: LocalDate?) {
+fun ApplicationPeriodText(startDate: LocalDate?, endDate: LocalDate?) {
     val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
-    val text = "${startDate.format(formatter)} ~ ${endDate?.format(formatter)?: "상시"}"
+    val text = when {
+        startDate == null && endDate == null -> "상시"
+        startDate == null -> "~ ${endDate?.format(formatter) ?: "상시"}"
+        endDate == null -> "${startDate.format(formatter)} ~ 상시"
+        else -> "${startDate.format(formatter)} ~ ${endDate.format(formatter)}"
+    }
     Text(
         text = text,
         fontFamily = PretendardFontFamily,

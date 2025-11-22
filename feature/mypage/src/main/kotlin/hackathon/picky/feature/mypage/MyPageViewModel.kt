@@ -209,11 +209,15 @@ class MyPageViewModel @Inject constructor(
     /**
      * 종료일 문자열을 LocalDate로 변환
      */
-    private fun parseClosingDate(dateString: String): LocalDate {
+    private fun parseClosingDate(dateString: String?): LocalDate? {
         return try {
-            LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE)
+            if (dateString.isNullOrEmpty()) {
+                null  // 상시 모집이면 null 반환
+            } else {
+                LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE)
+            }
         } catch (e: Exception) {
-            LocalDate.now() // 파싱 실패시 현재 날짜 반환
+            null // 파싱 실패시에도 null 반환
         }
     }
 }
