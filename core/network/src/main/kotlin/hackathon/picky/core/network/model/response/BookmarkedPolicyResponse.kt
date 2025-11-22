@@ -45,21 +45,21 @@ data class BookmarkedPolicy(
     @SerialName("title")
     val title: String,
     @SerialName("category")
-    val category: String,
+    val category: String?,
     @SerialName("host")
-    val host: String,
+    val host: String?,
     @SerialName("always")
     val always: Boolean,
     @SerialName("bookmarked")
     val bookmarked: Boolean,
     @SerialName("StartDate")
-    val startDate: String,
+    val startDate: String?,
     @SerialName("EndDate")
-    val endDate: String,
+    val endDate: String?,
     @SerialName("dDay")
-    val dDay: Int,
+    val dDay: Int?,
     @SerialName("imageUrl")
     val imageUrl: String?,
     @SerialName("viewCount")
-    val viewCount: Long
+    val viewCount: Long?
 )

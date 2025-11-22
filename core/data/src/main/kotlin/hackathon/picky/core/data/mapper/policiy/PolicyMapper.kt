@@ -16,7 +16,7 @@ fun PolicyIncomeResponse.toEntity(): List<PolicyEntity> = this.data.map {
         endDate =  if (!it.always && !it.endDate.isNullOrEmpty()) {
             LocalDate.parse(it.endDate, formatter)
         } else null,
-        imageUrl = it.imageUrl ?: "",
+        imageUrl = "http://54.180.92.121:8080" + it.imageUrl ?: "",
         viewCount = it.viewCount ?: 0,
 
     )

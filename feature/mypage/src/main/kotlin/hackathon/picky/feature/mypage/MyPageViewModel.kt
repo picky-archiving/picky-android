@@ -201,8 +201,8 @@ class MyPageViewModel @Inject constructor(
         return CommonListItem(
             id = this.id.toInt(),
             title = this.title,
-            imageUrl = this.imageUrl ?: "",
-            closingDate = parseClosingDate(this.endDate)
+            imageUrl = "http://54.180.92.121:8080" + this.imageUrl ?: "",
+            closingDate = this.endDate?.let { parseClosingDate(it) } ?: null
         )
     }
 
