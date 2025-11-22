@@ -3,6 +3,7 @@ package hackathon.picky.core.network.datasource.policy
 import hackathon.picky.core.network.api.PolicyApi
 import hackathon.picky.core.network.model.ApiResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
+import hackathon.picky.core.network.model.response.PolicyListResponse
 import hackathon.picky.core.network.util.runRemote
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,7 +12,11 @@ import javax.inject.Singleton
 class RetrofitPolicyDatasource @Inject constructor(
     private val policyApi: PolicyApi
 ) : PolicyDatasource {
+    override suspend fun getPolicyList(page: Int, size: Int): ApiResponse<PolicyListResponse> {
+        return runRemote { policyApi.getPolicyList(page, size) }
+    }
+
     override suspend fun getPolicyDetail(policyId: Long): ApiResponse<PolicyDetailResponse> {
-        return runRemote { policyApi.getPolicyDetail(1) }
+        return runRemote { policyApi.getPolicyDetail(policyId) }
     }
 }
