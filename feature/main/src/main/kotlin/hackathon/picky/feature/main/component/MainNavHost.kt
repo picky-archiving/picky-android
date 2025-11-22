@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import hackathon.picky.feature.auth.authNavGraph
 import hackathon.picky.feature.home.homeNavGraph
 import hackathon.picky.feature.main.MainNavigator
+import hackathon.picky.feature.search.searchNavGraph
 
 @Composable
 fun MainNavHost(
@@ -31,12 +32,19 @@ fun MainNavHost(
             homeNavGraph(
                 padding = padding,
                 navigateMy = { },
-                navigateSearch = {},
+                navigateSearch = navigator::navigateSearch,
+                onBackPressed = navigator::onBackPressed
             )
 
             authNavGraph(
                 padding = padding,
                 navigateHome = navigator::navigateHome
+            )
+
+            searchNavGraph(
+                padding = padding,
+                navigateDetail = navigator::navigatePolicyDetail,
+                onBackPressed = navigator::onBackPressed
             )
         }
     }

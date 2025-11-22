@@ -2,17 +2,18 @@ package hackathon.picky.feature.home.model
 
 import android.R
 import hackathon.picky.core.model.Category
+import hackathon.picky.core.model.CommonListItem
 import java.time.LocalDateTime
 
 sealed class HomeUiState {
     data class Main(
         val infoSectionList: List<HomeSectionListItem>,
-        val topBannerList: List<HomeListItem>, // url 반환 시 String으로, HomeTopBanner도 그에 맞게 변경
-        val topList: List<HomeListItem>
+        val topBannerList: List<CommonListItem>, // url 반환 시 String으로, HomeTopBanner도 그에 맞게 변경
+        val topList: List<CommonListItem>
     ) : HomeUiState()
 
     data class Detail(
-        val previousUiState: HomeUiState,
+        val previousUiState: HomeUiState?,
         val policyDetail: PolicyDetail,
         val daysRemaining: Int,
         val isBookmarked: Boolean = false
@@ -20,7 +21,7 @@ sealed class HomeUiState {
 
     data class ListScreen(
         val previousUiState: HomeUiState,
-        val list: List<HomeListItem>,
+        val list: List<CommonListItem>,
         val category: Category
     ) : HomeUiState()
 
@@ -34,17 +35,17 @@ val HomeUiTest = HomeUiState.Main(
             description = "당신을 위한 맞춤 추천",
             titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
-                HomeListItem(
+                CommonListItem(
                     id = 1,
                     imageRes = R.drawable.ic_menu_camera, title = "Item 1",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
-                HomeListItem(
+                CommonListItem(
                     id = 2,
                     imageRes = R.drawable.ic_menu_compass, title = "Item 2",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
-                HomeListItem(
+                CommonListItem(
                     id = 3,
                     imageRes = R.drawable.ic_menu_agenda,
                     title = "Item 3",
@@ -58,17 +59,17 @@ val HomeUiTest = HomeUiState.Main(
             description = "당신을 위한 맞춤 추천",
             titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
-                HomeListItem(
+                CommonListItem(
                     id = 1,
                     imageRes = R.drawable.ic_menu_camera, title = "Item 1",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
-                HomeListItem(
+                CommonListItem(
                     id = 2,
                     imageRes = R.drawable.ic_menu_compass, title = "Item 2",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
-                HomeListItem(
+                CommonListItem(
                     id = 3,
                     imageRes = R.drawable.ic_menu_agenda,
                     title = "Item 3",
@@ -79,27 +80,27 @@ val HomeUiTest = HomeUiState.Main(
         ),
     ),
     topBannerList = listOf(
-        HomeListItem(
+        CommonListItem(
             id = 1,
             imageRes = R.drawable.ic_menu_camera,
             title = "Banner 1",
             closingDate = LocalDateTime.now().plusDays(5)
         ),
-        HomeListItem(
+        CommonListItem(
             id = 2,
             imageRes = R.drawable.ic_menu_compass,
             title = "Banner 2",
             closingDate = LocalDateTime.now().plusDays(5)
         ),
     ),
-    topList =  listOf(
-        HomeListItem(
+    topList = listOf(
+        CommonListItem(
             id = 1,
             imageRes = R.drawable.ic_menu_camera,
             title = "Banner 1",
             closingDate = LocalDateTime.now().plusDays(5)
         ),
-        HomeListItem(
+        CommonListItem(
             id = 2,
             imageRes = R.drawable.ic_menu_compass,
             title = "Banner 2",
