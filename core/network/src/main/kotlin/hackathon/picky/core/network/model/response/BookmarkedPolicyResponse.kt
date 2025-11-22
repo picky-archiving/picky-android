@@ -53,11 +53,11 @@ data class BookmarkedPolicy(
     @SerialName("bookmarked")
     val bookmarked: Boolean,
     @SerialName("StartDate")
-    val startDate: String,
+    val startDate: String?,  // nullable로 변경 (상시 모집이면 null)
     @SerialName("EndDate")
-    val endDate: String,
+    val endDate: String?,    // nullable로 변경 (상시 모집이면 null)
     @SerialName("dDay")
-    val dDay: Int,
+    val dDay: Int?,          // nullable로 변경 (상시 모집이면 null)
     @SerialName("imageUrl")
     val imageUrl: String?,
     @SerialName("viewCount")
