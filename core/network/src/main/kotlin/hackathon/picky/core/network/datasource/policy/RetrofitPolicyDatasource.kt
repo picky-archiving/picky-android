@@ -6,8 +6,11 @@ import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
 import hackathon.picky.core.network.model.response.BookmarkToggleResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
+import hackathon.picky.core.network.model.response.PolicyIncomeResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
 import hackathon.picky.core.network.util.runRemote
+import retrofit2.Response
+import retrofit2.http.Header
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,5 +43,8 @@ class RetrofitPolicyDatasource @Inject constructor(
 
     override suspend fun removeBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse> {
         return runRemote { policyApi.removeBookmark(policyId) }
+        
+    override suspend fun getPolicyIncomeList(): ApiResponse<PolicyIncomeResponse> = runRemote {
+        policyApi.getPolicyIncomeList()
     }
 }

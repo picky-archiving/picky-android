@@ -176,7 +176,6 @@ private fun HomeScreen(
 
                                 HomeInfoSection(
                                     category = item.category,
-                                    description = item.description,
                                     list = item.infoList,
                                     onClickDetail = onClickDetail,
                                     onClickList = onClickList,

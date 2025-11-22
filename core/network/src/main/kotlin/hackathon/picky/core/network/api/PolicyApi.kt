@@ -4,11 +4,13 @@ import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
 import hackathon.picky.core.network.model.response.BookmarkToggleResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
+import hackathon.picky.core.network.model.response.PolicyIncomeResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -71,4 +73,13 @@ interface PolicyApi {
     suspend fun removeBookmark(
         @Path("policyId") policyId: Long
     ): Response<BookmarkToggleResponse>
+
+    /**
+     * 소득분위별 게시물 조회(조회수 상위 3개)
+     * @Header userId
+     */
+    @GET("api/post/income")
+    suspend fun getPolicyIncomeList(
+        @Header("X-USER-ID") userId: Long = 1
+    ): Response<PolicyIncomeResponse>
 }

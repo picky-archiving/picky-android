@@ -60,7 +60,7 @@ data class PolicyInfo(
     @SerialName("always")
     val always: Boolean,
     @SerialName("startDate")
-    val startDate: String,
+    val startDate: String?,
     @SerialName("endDate")
     val endDate: String?,
     @SerialName("url")

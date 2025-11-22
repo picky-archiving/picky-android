@@ -5,11 +5,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hackathon.picky.core.data.repo.PolicyRepository
 import hackathon.picky.core.model.common.Category
+import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.core.model.common.SearchFilter
+import hackathon.picky.feature.home.model.HomeSectionListItem
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
 import hackathon.picky.feature.home.model.PolicyDetail
-import hackathon.picky.feature.home.model.policyDetailData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -65,14 +66,64 @@ class HomeViewModel @Inject constructor(
                         HomeUiTest
                     }
                 }
-        } else _uiState.update { HomeUiTest }
+        } else {
+            policyRepository.getHomeData().onSuccess { data ->
+                _uiState.update {
+                    HomeUiState.Main(
+                        infoSectionList = data.categories.map {
+                            HomeSectionListItem(
+                                category = it.category,
+                                infoList = it.policies.map {
+                                    CommonListItem(
+                                        id = it.id.toInt(),
+                                        title = it.title,
+                                        imageUrl = it.imageUrl,
+                                        closingDate = it.endDate,
+                                        viewCount = it.viewCount
+                                    )
+                                }
+                            )
+                        },
+                        topBannerList = emptyList(),
+                        topList = data.incomePolicies.map {
+                            CommonListItem(
+                                id = it.id.toInt(),
+                                title = it.title,
+                                imageUrl = it.imageUrl,
+                                closingDate = it.endDate,
+                                viewCount = it.viewCount
+                            )
+                        },
+                    )
+                }
+            }.onFailure { }
+            policyRepository.getPolicyIncomeList().onSuccess {
+                _uiState.update { prev ->
+                    (prev as? HomeUiState.Main)?.let { mainState ->
+                        mainState.copy(
+                            topBannerList = it.map {
+                                CommonListItem(
+                                    id = it.id.toInt(),
+                                    title = it.title,
+                                    imageUrl = it.imageUrl,
+                                    closingDate = it.endDate,
+                                    viewCount = it.viewCount
+                                )
+                            }
+                        ) ?: prev
+                    } ?: prev
+                }
+            }.onFailure {
+
+            }
+        }
     }
 
 
     fun clickDetail(policyId: Int) = viewModelScope.launch {
         policyRepository.getPolicyDetail(policyId.toLong())
             .onSuccess { data ->
-                _uiState.update { prev->
+                _uiState.update { prev ->
                     HomeUiState.Detail(
                         previousUiState = prev,
                         policyDetail = PolicyDetail(
@@ -95,23 +146,53 @@ class HomeViewModel @Inject constructor(
 
 
     fun clickList(category: Category) = viewModelScope.launch {
-        val searchFilter =
-            (uiState.value as? HomeUiState.ListScreen)?.searchFilter ?: SearchFilter.RECENT
         _uiState.update { prev ->
-            HomeUiState.ListScreen(
-                previousUiState = prev,
-                list = HomeUiTest.infoSectionList[0].infoList,
-                category = category,
-                searchFilter = searchFilter
-            )
+            if (category != Category.TOP) {
+                (prev as? HomeUiState.Main)?.let { mainState ->
+                    HomeUiState.ListScreen(
+                        previousUiState = prev,
+                        list = mainState.infoSectionList
+                            .filter { it.category == category }
+                            .flatMap { it.infoList }
+                            .sortedWith(compareByDescending<CommonListItem> {
+                                it.closingDate ?: LocalDate.MAX
+                            }),
+                        category = category,
+                        searchFilter = SearchFilter.RECENT
+                    )
+                } ?: prev
+            } else {
+                (prev as? HomeUiState.Main)?.let { mainState ->
+                    HomeUiState.ListScreen(
+                        previousUiState = prev,
+                        list = mainState.topList
+                            .sortedWith(compareByDescending<CommonListItem> {
+                                it.closingDate ?: LocalDate.MAX
+                            }),
+                        category = category,
+                        searchFilter = SearchFilter.RECENT
+                    )
+                } ?: prev
+            }
         }
     }
+
 
     fun onFilterChange(searchFilter: SearchFilter) {
         _uiState.update { prev ->
             (prev as? HomeUiState.ListScreen?)?.let {
+                val sortedList = if (searchFilter == SearchFilter.RECENT) {
+                    prev.list.sortedWith(compareByDescending<CommonListItem> {
+                        it.closingDate ?: LocalDate.MAX
+                    })
+                } else {
+                    // 인기순: viewCount 기준 내림차순, null은 0으로 처리
+                    prev.list.sortedByDescending { it.viewCount ?: 0L }
+                }
+
                 it.copy(
-                    searchFilter = searchFilter
+                    searchFilter = searchFilter,
+                    list = sortedList
                 )
             } ?: prev
         }

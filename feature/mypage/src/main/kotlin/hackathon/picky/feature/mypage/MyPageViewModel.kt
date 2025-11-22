@@ -7,6 +7,7 @@ import hackathon.picky.core.data.repo.PolicyRepository
 import hackathon.picky.core.data.repo.UserRepository
 import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.core.network.model.response.BookmarkedPolicy
+import hackathon.picky.core.model.common.CommonListItemTest
 import hackathon.picky.feature.mypage.model.MyPageUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

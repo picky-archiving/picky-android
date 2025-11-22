@@ -5,6 +5,7 @@ import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
 import hackathon.picky.core.network.model.response.BookmarkToggleResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
+import hackathon.picky.core.network.model.response.PolicyIncomeResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
 
 interface PolicyDatasource {
@@ -44,4 +45,10 @@ interface PolicyDatasource {
      * @param policyId 정책 ID
      */
     suspend fun removeBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse>
+
+    /**
+     * 소득분위별 게시물 조회(조회수 상위 3개)
+     * @Header userId
+     */
+    suspend fun getPolicyIncomeList(): ApiResponse<PolicyIncomeResponse>
 }
