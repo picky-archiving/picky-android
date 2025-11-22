@@ -14,3 +14,7 @@ val DarkGray = Color(0xFF121212)
 val LightGray = Color(0xFFD7D7D7)
 
 val Black = Color(0xFF000000)
+
+val primary = Color(0xFFF56D17)
+
+val secondary = Color(0x1AFEF8F3)
