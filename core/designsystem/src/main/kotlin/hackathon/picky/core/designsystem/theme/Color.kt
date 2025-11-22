@@ -13,8 +13,13 @@ val Pink40 = Color(0xFF7D5260)
 val DarkGray = Color(0xFF121212)
 val LightGray = Color(0xFFD7D7D7)
 
+val Gray100 = Color(0xFFF3F4F6)
+val Gray400 = Color(0xFF9CA3AF)
+val Gray500 = Color(0xFF6B7280)
+val Gray800 = Color(0xFF1F2937)
+
 val Black = Color(0xFF000000)
 
-val primary = Color(0xFFF56D17)
+val Primary = Color(0xFFF56D17)
 
-val secondary = Color(0x1AFEF8F3)
+val Secondary = Color(0x1AFEF8F3)
