@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Skeleton" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Skeleton" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- 앱 시작 시 흰색 배경으로 설정 -->
+        <item name="android:windowBackground">@color/white</item>
+        <!-- 시스템 런처 아이콘 애니메이션 비활성화 -->
+        <item name="android:windowDisablePreview">true</item>
+    </style>
 </resources>
