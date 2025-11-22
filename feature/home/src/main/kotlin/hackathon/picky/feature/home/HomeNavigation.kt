@@ -20,6 +20,10 @@ fun NavController.navigatePolicyDetail(
     navigate(Route.PolicyDetail(policyId))
 }
 
+fun NavController.navigateMyPage() {
+    navigate(Route.MyPage)
+}
+
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
     navigateMy: () -> Unit,

@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import hackathon.picky.feature.auth.authNavGraph
 import hackathon.picky.feature.home.homeNavGraph
 import hackathon.picky.feature.main.MainNavigator
+import hackathon.picky.feature.mypage.myPageNavGraph
 
 @Composable
 fun MainNavHost(
@@ -30,8 +31,13 @@ fun MainNavHost(
         ) {
             homeNavGraph(
                 padding = padding,
-                navigateMy = { },
+                navigateMy = navigator::navigateMyPage,
                 navigateSearch = {},
+            )
+
+            myPageNavGraph(
+                padding = padding,
+                onBackClick = navigator::popBackStackIfNotHome
             )
 
             authNavGraph(

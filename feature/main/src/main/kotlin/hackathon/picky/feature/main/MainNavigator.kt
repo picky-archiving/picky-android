@@ -13,6 +13,7 @@ import androidx.navigation.navOptions
 import hackathon.picky.core.navigation.MainTabRoute
 import hackathon.picky.core.navigation.Route
 import hackathon.picky.feature.home.navigateHome
+import hackathon.picky.feature.home.navigateMyPage
 import hackathon.picky.feature.home.navigatePolicyDetail
 
 class MainNavigator(
@@ -58,6 +59,10 @@ class MainNavigator(
 
     fun navigatePolicyDetail(policyId: String) {
         navController.navigatePolicyDetail(policyId)
+    }
+
+    fun navigateMyPage() {
+        navController.navigateMyPage()
     }
 
     fun popBackStackIfNotHome() {

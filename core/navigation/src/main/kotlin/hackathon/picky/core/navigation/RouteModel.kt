@@ -8,6 +8,9 @@ sealed interface Route {
 
     @Serializable
     data class PolicyDetail(val policyId: String = "") : Route
+    
+    @Serializable
+    data object MyPage : Route
 }
 
 sealed interface MainTabRoute : Route {
