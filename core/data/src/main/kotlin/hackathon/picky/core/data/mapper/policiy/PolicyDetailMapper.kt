@@ -10,7 +10,7 @@ fun PolicyDetailData.toEntity(): PolicyDetailEntity {
     return PolicyDetailEntity(
         id = this.id,
         title = this.title,
-        imgUrl = this.imageUrl,
+        imgUrl = "http://54.180.92.121:8080"+this.imageUrl,
         department = this.host,
         startDate = this.startDate?.let {
             try {

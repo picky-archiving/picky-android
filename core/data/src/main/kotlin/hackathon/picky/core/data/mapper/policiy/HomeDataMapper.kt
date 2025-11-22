@@ -28,7 +28,7 @@ fun PolicyInfo.toEntity(): PolicyInfoEntity {
         id = this.id,
         category = this.category,
         title = this.title,
-        imageUrl = this.imageUrl,
+        imageUrl = "http://54.180.92.121:8080"+this.imageUrl,
         always = this.always,
         endDate = if (!this.always) {
             LocalDate.parse(this.endDate)

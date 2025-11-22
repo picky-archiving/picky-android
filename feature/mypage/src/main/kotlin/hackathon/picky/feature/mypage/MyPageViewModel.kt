@@ -7,7 +7,6 @@ import hackathon.picky.core.data.repo.PolicyRepository
 import hackathon.picky.core.data.repo.UserRepository
 import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.core.network.model.response.BookmarkedPolicy
-import hackathon.picky.core.model.common.CommonListItemTest
 import hackathon.picky.feature.mypage.model.MyPageUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,12 +14,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,6 +34,11 @@ class MyPageViewModel @Inject constructor(
     val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
 
     init {
+        loadUserIncomeBracket()
+        loadBookmarkedPolicies()
+    }
+
+    fun refresh() {
         loadUserIncomeBracket()
         loadBookmarkedPolicies()
     }
@@ -201,8 +201,8 @@ class MyPageViewModel @Inject constructor(
         return CommonListItem(
             id = this.id.toInt(),
             title = this.title,
-            imageUrl = this.imageUrl ?: "",
-            closingDate = parseClosingDate(this.endDate)
+            imageUrl = "http://54.180.92.121:8080" + this.imageUrl ?: "",
+            closingDate = this.endDate?.let { parseClosingDate(it) } ?: null
         )
     }
 
