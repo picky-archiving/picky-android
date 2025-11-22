@@ -12,6 +12,8 @@ import androidx.navigation.navOptions
 import hackathon.picky.core.navigation.Route
 import hackathon.picky.feature.home.navigateHome
 import hackathon.picky.feature.home.navigatePolicyDetail
+import hackathon.picky.feature.mypage.navigateMyPage
+import hackathon.picky.feature.search.navigateSearch
 
 class MainNavigator(
     val navController: NavHostController
@@ -55,7 +57,11 @@ class MainNavigator(
     }
 
     fun navigatePolicyDetail(policyId: Int) {
-        navController.navigatePolicyDetail(policyId)
+        navController.navigatePolicyDetail(policyId = policyId, navOptions =  singleTopOptions)
+    }
+
+    fun navigateMyPage() {
+        navController.navigateMyPage()
     }
 
     fun popBackStackIfNotHome() {
@@ -65,9 +71,7 @@ class MainNavigator(
     }
 
     fun navigateSearch() {
-        navController.navigate(Route.SearchRoute) {
-            launchSingleTop = true
-        }
+        navController.navigateSearch(singleTopOptions)
 
     }
 

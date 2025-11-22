@@ -15,10 +15,12 @@ fun NavController.navigateHome(
 }
 
 fun NavController.navigatePolicyDetail(
+    navOptions: NavOptions,
     policyId: Int
 ) {
-    navigate(Route.Home(policyId))
+    navigate(Route.Home(policyId), navOptions)
 }
+
 
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,

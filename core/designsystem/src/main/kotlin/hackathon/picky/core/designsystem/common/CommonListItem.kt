@@ -36,12 +36,12 @@ fun CommonListItemBox(
     title: String,
     closingDate: LocalDateTime,
     onClickDetail: (Int) -> Unit,
-    type: CommonListType = CommonListType.FIX,
+    type: CommonListType = CommonListType.FIX
 ) {
 
-    val size = when(type){
+    val size = when (type) {
         CommonListType.FIX -> 128.dp
-        CommonListType.DYNAMIC ->  (LocalConfiguration.current.screenWidthDp.dp - 52.dp)/2
+        CommonListType.DYNAMIC -> (LocalConfiguration.current.screenWidthDp.dp - 52.dp) / 2
     }
     Column(
         modifier = Modifier
@@ -54,7 +54,7 @@ fun CommonListItemBox(
             )
     ) {
         Box(
-            modifier =  Modifier
+            modifier = Modifier
                 .size(size)
                 .clip(RoundedCornerShape(8.dp))
         ) {
@@ -99,6 +99,6 @@ fun CommonListItemBoxPreview() {
     )
 }
 
-enum class CommonListType{
+enum class CommonListType {
     FIX, DYNAMIC
 }

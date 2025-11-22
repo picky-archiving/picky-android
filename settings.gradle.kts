@@ -41,3 +41,4 @@ includeBuild("build-logic") {
 
 include(":feature:home")
 include(":feature:search")
+include(":feature:mypage")

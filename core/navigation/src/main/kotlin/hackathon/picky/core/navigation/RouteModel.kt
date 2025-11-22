@@ -12,6 +12,9 @@ sealed interface Route {
 
     @Serializable
     data object SearchRoute : Route
+
+    @Serializable
+    data object MyPage : Route
 }
 
 sealed interface MainTabRoute : Route {
