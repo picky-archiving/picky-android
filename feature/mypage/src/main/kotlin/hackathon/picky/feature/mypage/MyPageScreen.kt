@@ -3,6 +3,7 @@ package hackathon.picky.feature.mypage
 import android.R
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -11,15 +12,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hackathon.picky.core.designsystem.common.BackTopBar
+import hackathon.picky.core.designsystem.common.PickySnackbar
 import hackathon.picky.core.designsystem.theme.AppColors
+import hackathon.picky.core.designsystem.theme.Primary
 import hackathon.picky.core.model.CommonListItemTest
 import hackathon.picky.feature.home.component.PolicyDetailContent
 import hackathon.picky.feature.home.model.HomeUiState
@@ -65,7 +74,8 @@ fun MyPageRoute(
         onClickDetail = viewModel::clickDetail,
         onBookmarkClick = viewModel::toggleBookmark,
         onDismissBottomSheet = viewModel::dismissBottomSheet,
-        onRankSelected = viewModel::updateRank
+        onRankSelected = viewModel::updateRank,
+        onClearError = viewModel::clearErrorMessage
     )
 }
 
@@ -79,16 +89,29 @@ private fun MyPageScreen(
     onClickDetail: (Int) -> Unit,
     onBookmarkClick: () -> Unit,
     onDismissBottomSheet: () -> Unit,
-    onRankSelected: (String) -> Unit
+    onRankSelected: (String) -> Unit,
+    onClearError: () -> Unit
 ) {
     val scrollState = rememberScrollState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Column(
+    // 에러 메시지 표시
+    if (uiState is MyPageUiState.Main && uiState.errorMessage != null) {
+        LaunchedEffect(uiState.errorMessage) {
+            snackbarHostState.showSnackbar(uiState.errorMessage)
+            onClearError()
+        }
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(AppColors.White)
             .padding(padding)
     ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
         when (uiState) {
             is MyPageUiState.Main -> {
                 // 헤더
@@ -98,26 +121,38 @@ private fun MyPageScreen(
                     onClickSearch = onSearchClick
                 )
 
-                // 스크롤 가능한 컨텐츠
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                ) {
-                    // 프로필 카드
-                    MyPageProfileCard(
-                        rank = uiState.rank,
-                        incomeRange = uiState.incomeRange,
-                        onEditClick = onEditClick
-                    )
+                // 로딩 상태 표시
+                if (uiState.isLoading) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = Primary
+                        )
+                    }
+                } else {
+                    // 스크롤 가능한 컨텐츠
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(scrollState)
+                    ) {
+                        // 프로필 카드
+                        MyPageProfileCard(
+                            rank = uiState.rank,
+                            incomeRange = uiState.incomeRange,
+                            onEditClick = onEditClick
+                        )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                    // 북마크 리스트
-                    BookmarkSection(
-                        bookmarkedPolicies = uiState.bookmarkedPolicies,
-                        onClickDetail = onClickDetail
-                    )
+                        // 북마크 리스트
+                        BookmarkSection(
+                            bookmarkedPolicies = uiState.bookmarkedPolicies,
+                            onClickDetail = onClickDetail
+                        )
+                    }
                 }
 
                 // 바텀시트
@@ -146,6 +181,20 @@ private fun MyPageScreen(
                 )
             }
         }
+        }
+
+        // Snackbar
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp)
+        ) { snackbarData ->
+            PickySnackbar(
+                message = snackbarData.visuals.message,
+                isError = true
+            )
+        }
     }
 }
 
@@ -161,7 +210,8 @@ private fun MyPageScreenPreview() {
         onClickDetail = { _ -> },
         onBookmarkClick = {},
         onDismissBottomSheet = {},
-        onRankSelected = {}
+        onRankSelected = {},
+        onClearError = {}
     )
 }
 
