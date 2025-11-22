@@ -8,6 +8,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import retrofit2.Response
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 suspend fun <T> runRemote(block: suspend() -> Response<T>): ApiResponse<T> {
     return try {
@@ -44,11 +45,14 @@ suspend fun <T> runRemote(block: suspend() -> Response<T>): ApiResponse<T> {
                 body = errorBodyString
             )
         }
+    } catch (e: SocketTimeoutException) {
+        Log.e("RetrofitError", "Timeout: $e")
+        ApiResponse.Failure.NetworkError(e)
     } catch (e: IOException) {
-        Log.e("RetrofitError", "$e")
+        Log.e("RetrofitError", "Network Error: $e")
         ApiResponse.Failure.NetworkError(e)
     } catch (e: Exception) {
-        Log.e("RetrofitError", "$e")
+        Log.e("RetrofitError", "Unknown Error: $e")
         ApiResponse.Failure.UnknownApiError(e)
     }
 }
