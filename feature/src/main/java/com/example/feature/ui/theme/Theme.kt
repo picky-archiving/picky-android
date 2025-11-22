@@ -1,4 +1,4 @@
-package com.example.feature.ui.theme
+package hackathon.picky.feature.ui.theme
 
 import android.app.Activity
 import android.os.Build

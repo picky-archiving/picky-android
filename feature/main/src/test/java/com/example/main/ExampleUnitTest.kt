@@ -1,4 +1,4 @@
-package com.example.main
+package hackathon.picky.main
 
 import org.junit.Test
 

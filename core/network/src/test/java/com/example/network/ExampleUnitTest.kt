@@ -1,4 +1,4 @@
-package com.example.network
+package hackathon.picky.network
 
 import org.junit.Test
 

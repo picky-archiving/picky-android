@@ -1,4 +1,4 @@
-package com.example.designsystem
+package hackathon.picky.designsystem
 
 import org.junit.Test
 

@@ -25,22 +25,22 @@ gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "example.android.application"
-            implementationClass = "com.example.convention.plugin.AndroidApplicationPlugin"
+            implementationClass = "hackathon.picky.convention.plugin.AndroidApplicationPlugin"
         }
 
         register("androidLibrary") {
             id = "example.android.library"
-            implementationClass = "com.example.convention.plugin.AndroidLibraryPlugin"
+            implementationClass = "hackathon.picky.convention.plugin.AndroidLibraryPlugin"
         }
 
         register("feature") {
             id = "example.feature"
-            implementationClass = "com.example.convention.plugin.FeaturePlugin"
+            implementationClass = "hackathon.picky.convention.plugin.FeaturePlugin"
         }
 
         register("core") {
             id = "example.core"
-            implementationClass = "com.example.convention.plugin.CorePlugin"
+            implementationClass = "hackathon.picky.convention.plugin.CorePlugin"
         }
     }
 }

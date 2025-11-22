@@ -1,0 +1,5 @@
+package hackathon.picky.core.network.model.response
+
+data class LoginResponse(
+    val isSuccess: Boolean
+)

@@ -1,4 +1,4 @@
-package com.example.skeleton
+package hackathon.picky.skeleton
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.example.skeleton
+package hackathon.picky.skeleton
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

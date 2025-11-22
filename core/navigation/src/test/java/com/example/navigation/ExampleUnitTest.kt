@@ -1,4 +1,4 @@
-package com.example.navigation
+package hackathon.picky.navigation
 
 import org.junit.Test
 

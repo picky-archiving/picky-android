@@ -1,4 +1,4 @@
-package com.example.feature.home
+package hackathon.picky.feature.home
 
 import org.junit.Test
 

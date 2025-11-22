@@ -1,4 +1,4 @@
-package com.example.local
+package hackathon.picky.local
 
 import org.junit.Test
 

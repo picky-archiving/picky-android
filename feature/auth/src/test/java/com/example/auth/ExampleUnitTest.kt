@@ -1,4 +1,4 @@
-package com.example.auth
+package hackathon.picky.auth
 
 import org.junit.Test
 
