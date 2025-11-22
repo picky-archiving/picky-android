@@ -2,6 +2,7 @@ package hackathon.picky.core.network.datasource.policy
 
 import hackathon.picky.core.network.api.PolicyApi
 import hackathon.picky.core.network.model.ApiResponse
+import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
@@ -23,5 +24,12 @@ class RetrofitPolicyDatasource @Inject constructor(
 
     override suspend fun getPolicyDetail(policyId: Long): ApiResponse<PolicyDetailResponse> {
         return runRemote { policyApi.getPolicyDetail(policyId) }
+    }
+
+    override suspend fun getBookmarkedPolicies(
+        page: Int,
+        size: Int
+    ): ApiResponse<BookmarkedPolicyResponse> {
+        return runRemote { policyApi.getBookmarkedPolicies(page, size) }
     }
 }
