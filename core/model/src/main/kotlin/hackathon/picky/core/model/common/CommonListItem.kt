@@ -1,13 +1,13 @@
 package hackathon.picky.core.model.common
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 data class CommonListItem (
     val id: Int,
     val title: String,
     val imageUrl: String,
-    val closingDate: LocalDate? // null일 경우 상시
+    val closingDate: LocalDate?, // null일 경우 상시
+    val viewCount: Long? = null
 )
 
 val CommonListItemTest = CommonListItem(

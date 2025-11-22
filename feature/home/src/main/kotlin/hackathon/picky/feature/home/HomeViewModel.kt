@@ -11,7 +11,6 @@ import hackathon.picky.feature.home.model.HomeSectionListItem
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
 import hackathon.picky.feature.home.model.PolicyDetail
-import hackathon.picky.feature.home.model.policyDetailData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -71,6 +70,7 @@ class HomeViewModel @Inject constructor(
                                             title = it.title,
                                             imageUrl = it.imageUrl,
                                             closingDate = it.endDate,
+                                            viewCount = it.viewCount
                                         )
                                     }
                                 )
@@ -124,23 +124,35 @@ class HomeViewModel @Inject constructor(
 
 
     fun clickList(category: Category) = viewModelScope.launch {
-        val searchFilter =
-            (uiState.value as? HomeUiState.ListScreen)?.searchFilter ?: SearchFilter.RECENT
         _uiState.update { prev ->
-            HomeUiState.ListScreen(
-                previousUiState = prev,
-                list = HomeUiTest.infoSectionList[0].infoList,
-                category = category,
-                searchFilter = searchFilter
-            )
+            (prev as? HomeUiState.Main)?.let { mainState ->
+                HomeUiState.ListScreen(
+                    previousUiState = prev,
+                    list = mainState.infoSectionList
+                        .filter { it.category == category }
+                        .flatMap { it.infoList }
+                        .sortedWith(compareByDescending<CommonListItem> { it.closingDate ?: LocalDate.MAX }),
+                    category = category,
+                    searchFilter = SearchFilter.RECENT
+                )
+            } ?: prev
         }
     }
+
 
     fun onFilterChange(searchFilter: SearchFilter) {
         _uiState.update { prev ->
             (prev as? HomeUiState.ListScreen?)?.let {
+                val sortedList = if (searchFilter == SearchFilter.RECENT) {
+                    prev.list.sortedWith(compareByDescending<CommonListItem> { it.closingDate ?: LocalDate.MAX })
+                } else {
+                    // 인기순: viewCount 기준 내림차순, null은 0으로 처리
+                    prev.list.sortedByDescending { it.viewCount ?: 0L }
+                }
+
                 it.copy(
-                    searchFilter = searchFilter
+                    searchFilter = searchFilter,
+                    list = sortedList
                 )
             } ?: prev
         }
