@@ -3,8 +3,9 @@ package hackathon.picky.feature.mypage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hackathon.picky.core.data.repo.PolicyRepository
 import hackathon.picky.core.model.CommonListItemTest
-import hackathon.picky.feature.home.model.policyDetailData
+import hackathon.picky.feature.home.model.PolicyDetail
 import hackathon.picky.feature.mypage.model.MyPageUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,14 +13,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor() : ViewModel() {
+class MyPageViewModel @Inject constructor(
+    private val policyRepository: PolicyRepository
+) : ViewModel() {
     private val _uiState = MutableStateFlow<MyPageUiState>(
         MyPageUiState.Main(
             rank = "3분위",
@@ -65,14 +67,37 @@ class MyPageViewModel @Inject constructor() : ViewModel() {
     }
 
     fun clickDetail(policyId: Int) = viewModelScope.launch {
-        _uiState.update { prev ->
-            MyPageUiState.Detail(
-                previousUiState = prev,
-                policyDetail = policyDetailData,
-                daysRemaining = calculateDaysRemaining("2024.09.28"),
-                isBookmarked = false
-            )
-        }
+        val previousState = _uiState.value
+
+        policyRepository.getPolicyDetail(policyId.toLong())
+            .onSuccess { policyData ->
+                // API 응답을 PolicyDetail 모델로 변환
+                val policyDetail = PolicyDetail(
+                    id = policyData.id.toString(),
+                    title = policyData.title,
+                    department = policyData.host,
+                    applicationPeriod = "${policyData.startDate} ~ ${policyData.endDate ?: "상시"}",
+                    eligibility = policyData.qualifications,
+                    description = policyData.content
+                )
+
+                val daysRemaining = policyData.endDate?.let {
+                    calculateDaysRemaining(it)
+                } ?: -1  // 상시모집인 경우 -1
+
+                _uiState.update {
+                    MyPageUiState.Detail(
+                        previousUiState = previousState,
+                        policyDetail = policyDetail,
+                        daysRemaining = daysRemaining,
+                        isBookmarked = policyData.bookmarked
+                    )
+                }
+            }
+            .onFailure { error ->
+                // 에러 처리 - 필요시 에러 상태 추가
+                // TODO: 에러 상태 표시
+            }
     }
 
     fun toggleBookmark() {
@@ -86,7 +111,9 @@ class MyPageViewModel @Inject constructor() : ViewModel() {
 
     private fun calculateDaysRemaining(endDate: String): Int {
         return try {
-            val formatter = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+            // API 응답 형식: "2025-05-31"
+            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
             val end = formatter.parse(endDate) ?: return 0
             val today = Calendar.getInstance().time
             val diffInMillis = end.time - today.time

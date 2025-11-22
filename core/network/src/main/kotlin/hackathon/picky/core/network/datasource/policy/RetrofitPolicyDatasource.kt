@@ -12,6 +12,6 @@ class RetrofitPolicyDatasource @Inject constructor(
     private val policyApi: PolicyApi
 ) : PolicyDatasource {
     override suspend fun getPolicyDetail(policyId: Long): ApiResponse<PolicyDetailResponse> {
-        return runRemote { policyApi.getPolicyDetail(policyId) }
+        return runRemote { policyApi.getPolicyDetail(1) }
     }
 }
