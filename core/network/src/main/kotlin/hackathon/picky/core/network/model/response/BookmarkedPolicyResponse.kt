@@ -57,7 +57,7 @@ data class BookmarkedPolicy(
     @SerialName("EndDate")
     val endDate: String?,
     @SerialName("dDay")
-    val dDay: Int?,
+    val dDay: Int?,          // nullable로 변경 (상시 모집이면 null)
     @SerialName("imageUrl")
     val imageUrl: String?,
     @SerialName("viewCount")
