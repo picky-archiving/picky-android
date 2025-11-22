@@ -2,6 +2,8 @@ package hackathon.picky.core.data.di
 
 import hackathon.picky.core.data.repo.AuthRepository
 import hackathon.picky.core.data.repo.AuthRepositoryImpl
+import hackathon.picky.core.data.repo.PolicyRepository
+import hackathon.picky.core.data.repo.PolicyRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,4 +16,9 @@ internal abstract class RepositoryModule {
     abstract fun bindAuthRepository(
         authRepository: AuthRepositoryImpl
     ): AuthRepository
+
+    @Binds
+    abstract fun bindPolicyRepository(
+        policyRepository: PolicyRepositoryImpl
+    ): PolicyRepository
 }
