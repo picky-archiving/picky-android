@@ -32,19 +32,20 @@ import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 @Composable
 fun BackTopBar(
     title: String,
-    onClickBack: () -> Unit
+    onClickBack: () -> Unit,
+    onClickSearch: (() -> Unit)? = null
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
-    val maxTextWidth = screenWidth - 40.dp - 60.dp
+    val maxTextWidth = screenWidth - 40.dp - 60.dp  // 좌우 아이콘 고려
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(52.dp)
-            .padding(horizontal = 20.dp),
-        contentAlignment = Alignment.Center
+            .padding(horizontal = 20.dp)
     ) {
+        // 텍스트 가운데 정렬
         Text(
             text = title,
             fontFamily = PretendardFontFamily,
@@ -53,28 +54,45 @@ fun BackTopBar(
             color = Gray800,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.widthIn(max = maxTextWidth)
+            modifier = Modifier
+                .align(Alignment.Center)
+                .widthIn(max = maxTextWidth)
         )
 
-        Row(
-            modifier = Modifier.matchParentSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        // 뒤로가기 아이콘 왼쪽 정렬
+        Icon(
+            painter = painterResource(id = R.drawable.back),
+            contentDescription = "back",
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .clip(RoundedCornerShape(8.dp))
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClick = onClickBack
+                )
+                .size(24.dp)
+        )
+
+        // 검색 아이콘 오른쪽 정렬
+        if (onClickSearch != null) {
             Icon(
-                painter = painterResource(id = R.drawable.back),
-                contentDescription = "back",
+                painter = painterResource(id = R.drawable.search),
+                contentDescription = "search",
                 modifier = Modifier
+                    .align(Alignment.CenterEnd)
                     .clip(RoundedCornerShape(8.dp))
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(),
-                        onClick = onClickBack
+                        onClick = { onClickSearch.invoke() }
                     )
                     .size(24.dp)
             )
         }
     }
 }
+
 
 
 @Composable

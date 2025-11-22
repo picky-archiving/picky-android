@@ -13,12 +13,14 @@ fun NavController.navigateMyPage(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.myPageNavGraph(
     padding: PaddingValues,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit,
 ) {
     composable<Route.MyPage> {
         MyPageRoute(
             padding = padding,
             onBackClick = onBackClick,
+            onSearchClick = onSearchClick
         )
     }
 }
