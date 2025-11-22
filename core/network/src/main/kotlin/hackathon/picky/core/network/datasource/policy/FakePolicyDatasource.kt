@@ -6,6 +6,7 @@ import hackathon.picky.core.network.model.response.HomeData
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailData
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
+import hackathon.picky.core.network.model.response.PolicyIncomeResponse
 import hackathon.picky.core.network.model.response.PolicyInfo
 import hackathon.picky.core.network.model.response.PolicyListResponse
 import hackathon.picky.core.network.model.response.PolicyPageData
@@ -239,5 +240,9 @@ class FakePolicyDatasource @Inject constructor() : PolicyDatasource {
         )
 
         return ApiResponse.Success(response)
+    }
+
+    override suspend fun getPolicyIncomeList(): ApiResponse<PolicyIncomeResponse> {
+        TODO("Not yet implemented")
     }
 }

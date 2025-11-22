@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.feature.search.component.SearchBar
 import hackathon.picky.feature.search.component.SearchListVerticalGridScroll
@@ -27,6 +29,9 @@ internal fun SearchRoute(
 
     BackHandler(enabled = uiState.value is SearchUiState) {
         onBackPressed()
+    }
+    LaunchedEffect(Unit) {
+        viewModel.getDataList()
     }
 
     SearchScreen(
@@ -67,6 +72,7 @@ internal fun SearchScreen(
                 SearchListVerticalGridScroll(
                     list = uiState.searchResult,
                     onClickDetail = onClickDetail,
+                    modifier = Modifier.padding(horizontal = 20.dp)
                 )
             }
 

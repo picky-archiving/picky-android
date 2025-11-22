@@ -58,42 +58,54 @@ class HomeViewModel @Inject constructor(
                 }
         } else {
             policyRepository.getHomeData().onSuccess { data ->
-                val data =
-                    _uiState.update {
-                        HomeUiState.Main(
-                            infoSectionList = data.categories.map {
-                                HomeSectionListItem(
-                                    category = it.category,
-                                    infoList = it.policies.map {
-                                        CommonListItem(
-                                            id = it.id.toInt(),
-                                            title = it.title,
-                                            imageUrl = it.imageUrl,
-                                            closingDate = it.endDate,
-                                            viewCount = it.viewCount
-                                        )
-                                    }
-                                )
-                            },
-                            topBannerList = data.incomePolicies.take(3).map {
+                _uiState.update {
+                    HomeUiState.Main(
+                        infoSectionList = data.categories.map {
+                            HomeSectionListItem(
+                                category = it.category,
+                                infoList = it.policies.map {
+                                    CommonListItem(
+                                        id = it.id.toInt(),
+                                        title = it.title,
+                                        imageUrl = it.imageUrl,
+                                        closingDate = it.endDate,
+                                        viewCount = it.viewCount
+                                    )
+                                }
+                            )
+                        },
+                        topBannerList = emptyList(),
+                        topList = data.incomePolicies.map {
+                            CommonListItem(
+                                id = it.id.toInt(),
+                                title = it.title,
+                                imageUrl = it.imageUrl,
+                                closingDate = it.endDate,
+                                viewCount = it.viewCount
+                            )
+                        },
+                    )
+                }
+            }.onFailure { }
+            policyRepository.getPolicyIncomeList().onSuccess {
+                _uiState.update { prev ->
+                    (prev as? HomeUiState.Main)?.let { mainState ->
+                        mainState.copy(
+                            topBannerList = it.map {
                                 CommonListItem(
                                     id = it.id.toInt(),
                                     title = it.title,
                                     imageUrl = it.imageUrl,
                                     closingDate = it.endDate,
-                                )
-                            },
-                            topList = data.incomePolicies.take(3).map {
-                                CommonListItem(
-                                    id = it.id.toInt(),
-                                    title = it.title,
-                                    imageUrl = it.imageUrl,
-                                    closingDate = it.endDate,
+                                    viewCount = it.viewCount
                                 )
                             }
-                        )
-                    }
-            }.onFailure { }
+                        ) ?: prev
+                    } ?: prev
+                }
+            }.onFailure {
+
+            }
         }
     }
 
@@ -125,17 +137,33 @@ class HomeViewModel @Inject constructor(
 
     fun clickList(category: Category) = viewModelScope.launch {
         _uiState.update { prev ->
-            (prev as? HomeUiState.Main)?.let { mainState ->
-                HomeUiState.ListScreen(
-                    previousUiState = prev,
-                    list = mainState.infoSectionList
-                        .filter { it.category == category }
-                        .flatMap { it.infoList }
-                        .sortedWith(compareByDescending<CommonListItem> { it.closingDate ?: LocalDate.MAX }),
-                    category = category,
-                    searchFilter = SearchFilter.RECENT
-                )
-            } ?: prev
+            if (category != Category.TOP) {
+                (prev as? HomeUiState.Main)?.let { mainState ->
+                    HomeUiState.ListScreen(
+                        previousUiState = prev,
+                        list = mainState.infoSectionList
+                            .filter { it.category == category }
+                            .flatMap { it.infoList }
+                            .sortedWith(compareByDescending<CommonListItem> {
+                                it.closingDate ?: LocalDate.MAX
+                            }),
+                        category = category,
+                        searchFilter = SearchFilter.RECENT
+                    )
+                } ?: prev
+            } else {
+                (prev as? HomeUiState.Main)?.let { mainState ->
+                    HomeUiState.ListScreen(
+                        previousUiState = prev,
+                        list = mainState.topList
+                            .sortedWith(compareByDescending<CommonListItem> {
+                                it.closingDate ?: LocalDate.MAX
+                            }),
+                        category = category,
+                        searchFilter = SearchFilter.RECENT
+                    )
+                } ?: prev
+            }
         }
     }
 
@@ -144,7 +172,9 @@ class HomeViewModel @Inject constructor(
         _uiState.update { prev ->
             (prev as? HomeUiState.ListScreen?)?.let {
                 val sortedList = if (searchFilter == SearchFilter.RECENT) {
-                    prev.list.sortedWith(compareByDescending<CommonListItem> { it.closingDate ?: LocalDate.MAX })
+                    prev.list.sortedWith(compareByDescending<CommonListItem> {
+                        it.closingDate ?: LocalDate.MAX
+                    })
                 } else {
                     // 인기순: viewCount 기준 내림차순, null은 0으로 처리
                     prev.list.sortedByDescending { it.viewCount ?: 0L }

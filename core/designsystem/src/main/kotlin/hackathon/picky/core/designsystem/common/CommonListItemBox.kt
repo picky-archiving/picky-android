@@ -26,7 +26,6 @@ import coil.compose.AsyncImage
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Composable
 fun CommonListItemBox(

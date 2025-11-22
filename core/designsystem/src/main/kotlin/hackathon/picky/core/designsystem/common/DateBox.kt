@@ -42,7 +42,7 @@ fun DateBox(closingDate: LocalDate, isAll: Boolean = false, modifier: Modifier =
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
-            text = if (daysRemaining >= 0) "D-$daysRemaining" else if (isClosed) "상시" else "마감",
+            text = if (daysRemaining > 0) "D-$daysRemaining" else if (isClosed) "상시" else "마감",
             fontFamily = PretendardFontFamily,
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,

@@ -5,6 +5,9 @@ import hackathon.picky.core.network.model.response.HomeData
 import hackathon.picky.core.network.model.response.PolicyDetailData
 import hackathon.picky.core.network.model.response.PolicyPageData
 import hackathon.picky.core.data.model.policy.PolicyDetailEntity
+import hackathon.picky.core.data.model.policy.PolicyEntity
+import hackathon.picky.core.network.model.ApiResponse
+import hackathon.picky.core.network.model.response.PolicyListResponse
 
 interface PolicyRepository {
     /**
@@ -27,4 +30,10 @@ interface PolicyRepository {
      * @return Result<PolicyDetailData> 성공 시 정책 상세 정보, 실패 시 에러
      */
     suspend fun getPolicyDetail(policyId: Long): Result<PolicyDetailEntity>
+
+    /**
+     * 소득분위별 게시물 조회(조회수 상위 3개)
+     * @Header userId
+     */
+    suspend fun getPolicyIncomeList(): Result<List<PolicyEntity>>
 }
