@@ -1,11 +1,14 @@
 package hackathon.picky.core.network.api
 
 import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
+import hackathon.picky.core.network.model.response.BookmarkToggleResponse
 import hackathon.picky.core.network.model.response.HomeResponse
 import hackathon.picky.core.network.model.response.PolicyDetailResponse
 import hackathon.picky.core.network.model.response.PolicyListResponse
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -48,4 +51,24 @@ interface PolicyApi {
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 20
     ): Response<BookmarkedPolicyResponse>
+
+    /**
+     * 북마크 등록
+     * @param policyId 정책 ID
+     * @return 북마크 상태 (bookmarked = true)
+     */
+    @POST("api/post/{policyId}/bookmark")
+    suspend fun addBookmark(
+        @Path("policyId") policyId: Long
+    ): Response<BookmarkToggleResponse>
+
+    /**
+     * 북마크 해제
+     * @param policyId 정책 ID
+     * @return 북마크 상태 (bookmarked = false)
+     */
+    @DELETE("api/post/{policyId}/bookmark")
+    suspend fun removeBookmark(
+        @Path("policyId") policyId: Long
+    ): Response<BookmarkToggleResponse>
 }
