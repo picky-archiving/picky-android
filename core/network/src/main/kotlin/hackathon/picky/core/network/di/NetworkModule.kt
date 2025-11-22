@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
@@ -46,6 +47,10 @@ internal object NetworkModule {
                     )
                 }
             }
+            // 타임아웃 설정
+            .connectTimeout(15, TimeUnit.SECONDS)  // 연결 타임아웃
+            .readTimeout(15, TimeUnit.SECONDS)     // 읽기 타임아웃
+            .writeTimeout(15, TimeUnit.SECONDS)    // 쓰기 타임아웃
             .build()
 
     @Provides

@@ -8,6 +8,8 @@ import hackathon.picky.core.data.model.policy.PolicyEntity
 import hackathon.picky.core.network.datasource.policy.PolicyDatasource
 import hackathon.picky.core.network.di.FakeDataSource
 import hackathon.picky.core.network.di.RealDataSource
+import hackathon.picky.core.network.model.response.BookmarkedPolicyPageData
+import hackathon.picky.core.network.model.response.BookmarkToggleData
 import hackathon.picky.core.network.model.response.HomeData
 import hackathon.picky.core.network.model.response.PolicyDetailData
 import hackathon.picky.core.network.model.response.PolicyListResponse
@@ -41,6 +43,33 @@ class PolicyRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getBookmarkedPolicies(
+        page: Int,
+        size: Int
+    ): Result<BookmarkedPolicyPageData> {
+        return policyDatasource.getBookmarkedPolicies(page, size).toResult(
+            transform = { response ->
+                response.data
+            }
+        )
+    }
+
+    override suspend fun addBookmark(policyId: Long): Result<BookmarkToggleData> {
+        return policyDatasource.addBookmark(policyId).toResult(
+            transform = { response ->
+                response.data
+            }
+        )
+    }
+
+    override suspend fun removeBookmark(policyId: Long): Result<BookmarkToggleData> {
+        return policyDatasource.removeBookmark(policyId).toResult(
+            transform = { response ->
+                response.data
+            }
+          )
+    }
+              
     override suspend fun getPolicyIncomeList(): Result<List<PolicyEntity>> {
         return policyDatasource.getPolicyIncomeList().toResult(
             transform = { response ->

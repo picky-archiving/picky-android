@@ -1,5 +1,7 @@
 package hackathon.picky.core.data.repo
 
+import hackathon.picky.core.network.model.response.BookmarkedPolicyPageData
+import hackathon.picky.core.network.model.response.BookmarkToggleData
 import hackathon.picky.core.data.model.policy.HomeDataEntity
 import hackathon.picky.core.network.model.response.HomeData
 import hackathon.picky.core.network.model.response.PolicyDetailData
@@ -31,6 +33,44 @@ interface PolicyRepository {
      */
     suspend fun getPolicyDetail(policyId: Long): Result<PolicyDetailEntity>
 
+    /**
+     * 북마크된 정책 목록 조회
+     * @param page 페이지 번호 (0-base)
+     * @param size 페이지 크기
+     * @return Result<BookmarkedPolicyPageData> 성공 시 북마크된 정책 목록, 실패 시 에러
+     */
+    suspend fun getBookmarkedPolicies(page: Int, size: Int): Result<BookmarkedPolicyPageData>
+
+    /**
+     * 북마크 등록
+     * @param policyId 정책 ID
+     * @return Result<BookmarkToggleData> 성공 시 북마크 상태 (bookmarked = true), 실패 시 에러
+     */
+    suspend fun addBookmark(policyId: Long): Result<BookmarkToggleData>
+
+    /**
+     * 북마크 해제
+     * @param policyId 정책 ID
+     * @return Result<BookmarkToggleData> 성공 시 북마크 상태 (bookmarked = false), 실패 시 에러
+     */
+    suspend fun removeBookmark(policyId: Long): Result<BookmarkToggleData>
+
+    /**
+     * 북마크 토글 (현재 상태에 따라 등록/해제)
+     * @param policyId 정책 ID
+     * @param isCurrentlyBookmarked 현재 북마크 상태
+     * @return Result<BookmarkToggleData> 성공 시 변경된 북마크 상태, 실패 시 에러
+     */
+    suspend fun toggleBookmark(
+        policyId: Long,
+        isCurrentlyBookmarked: Boolean
+    ): Result<BookmarkToggleData> {
+        return if (isCurrentlyBookmarked) {
+            removeBookmark(policyId)
+        } else {
+            addBookmark(policyId)
+        }
+    }
     /**
      * 소득분위별 게시물 조회(조회수 상위 3개)
      * @Header userId
