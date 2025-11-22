@@ -404,7 +404,61 @@ class FakePolicyDatasource @Inject constructor() : PolicyDatasource {
         )
 
         return ApiResponse.Success(response)
+    }
+
     override suspend fun getPolicyIncomeList(): ApiResponse<PolicyIncomeResponse> {
-        TODO("Not yet implemented")
+        delay(500) // 네트워크 지연 시뮬레이션
+
+        // 소득분위별 조회수 상위 3개 정책 (Fake 데이터)
+        val incomePolicies = listOf(
+            hackathon.picky.core.network.model.response.PolicyItem(
+                id = 11,
+                title = "청년 매입임대주택",
+                category = "주거",
+                host = "국토교통부",
+                always = false,
+                startDate = "2025-01-20",
+                endDate = "2025-12-20",
+                qualifications = "청년, 무주택자, 저소득층",
+                imageUrl = "https://fastly.picsum.photos/id/765/536/354.jpg?hmac=KdMEeWclG6G7uEBwImE8VC-vX6j6B7b2NbtqQNF80R0",
+                url = "https://www.naver.com",
+                viewCount = 550
+            ),
+            hackathon.picky.core.network.model.response.PolicyItem(
+                id = 12,
+                title = "소득연계 학자금 대출",
+                category = "교육",
+                host = "교육부",
+                always = true,
+                startDate = "2025-01-01",
+                endDate = null,
+                qualifications = "대학생, 저소득층",
+                imageUrl = "https://fastly.picsum.photos/id/765/536/354.jpg?hmac=KdMEeWclG6G7uEBwImE8VC-vX6j6B7b2NbtqQNF80R0",
+                url = "https://www.naver.com",
+                viewCount = 670
+            ),
+            hackathon.picky.core.network.model.response.PolicyItem(
+                id = 13,
+                title = "저소득층 생활안정자금",
+                category = "금융",
+                host = "보건복지부",
+                always = false,
+                startDate = "2025-01-01",
+                endDate = "2025-12-31",
+                qualifications = "저소득층",
+                imageUrl = "https://fastly.picsum.photos/id/765/536/354.jpg?hmac=KdMEeWclG6G7uEBwImE8VC-vX6j6B7b2NbtqQNF80R0",
+                url = "https://www.naver.com",
+                viewCount = 380
+            )
+        )
+
+        val response = PolicyIncomeResponse(
+            data = incomePolicies,
+            message = "소득분위별 정책 조회 성공",
+            success = true,
+            timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        )
+
+        return ApiResponse.Success(response)
     }
 }
