@@ -1,5 +1,9 @@
 package hackathon.picky.feature.home.model
 
+import android.R
+import hackathon.picky.core.model.Category
+import java.time.LocalDateTime
+
 sealed class HomeUiState {
     data class Main(
         val infoSectionList: List<HomeSectionListItem>,
@@ -21,28 +25,50 @@ val HomeUiTest = HomeUiState.Main(
         HomeSectionListItem(
             title = "오늘의 픽!",
             description = "당신을 위한 맞춤 추천",
-            titleImageRes = android.R.drawable.ic_menu_camera,
+            titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
-                HomeListItem(imageRes = android.R.drawable.ic_menu_camera, title = "Item 1"),
-                HomeListItem(imageRes = android.R.drawable.ic_menu_compass, title = "Item 2"),
-                HomeListItem(imageRes = android.R.drawable.ic_menu_agenda, title = "Item 3"),
+                HomeListItem(
+                    imageRes = R.drawable.ic_menu_camera,
+                    title = "Item 1",
+                    closingDate = LocalDateTime.now().plusDays(3)
+                ),
+                HomeListItem(
+                    imageRes = R.drawable.ic_menu_compass, title = "Item 2",
+                    closingDate = LocalDateTime.now().plusDays(3)
+                ),
+                HomeListItem(
+                    imageRes = R.drawable.ic_menu_agenda, title = "Item 3",
+                    closingDate = LocalDateTime.now().plusDays(3)
+                ),
             ),
+            category = Category.EDUCATION,
         ),
         HomeSectionListItem(
             title = "오늘의 픽!",
             description = "당신을 위한 맞춤 추천",
-            titleImageRes = android.R.drawable.ic_menu_camera,
+            titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
-                HomeListItem(imageRes = android.R.drawable.ic_menu_camera, title = "Item 1"),
-                HomeListItem(imageRes = android.R.drawable.ic_menu_compass, title = "Item 2"),
-                HomeListItem(imageRes = android.R.drawable.ic_menu_agenda, title = "Item 3"),
+                HomeListItem(
+                    imageRes = R.drawable.ic_menu_camera, title = "Item 1",
+                    closingDate = LocalDateTime.now().plusDays(3)
+                ),
+                HomeListItem(
+                    imageRes = R.drawable.ic_menu_compass, title = "Item 2",
+                    closingDate = LocalDateTime.now().plusDays(3)
+                ),
+                HomeListItem(
+                    imageRes = R.drawable.ic_menu_agenda,
+                    title = "Item 3",
+                    closingDate = LocalDateTime.now().plusDays(3)
+                ),
             ),
+            category = Category.EMPLOYMENT,
         ),
     ),
     topBannerList = listOf(
-        android.R.drawable.ic_menu_camera,
-        android.R.drawable.ic_menu_camera,
-        android.R.drawable.ic_menu_camera
+        R.drawable.ic_menu_camera,
+        R.drawable.ic_menu_camera,
+        R.drawable.ic_menu_camera
     )
 )
 

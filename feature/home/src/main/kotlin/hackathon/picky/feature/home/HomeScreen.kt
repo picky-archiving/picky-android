@@ -79,8 +79,7 @@ private fun HomeScreen(
                     Spacer(modifier = Modifier.height(20.dp))
                     (uiState as HomeUiState.Main).infoSectionList.forEach {
                         HomeInfoSection(
-                            titleImageRes = it.titleImageRes,
-                            title = it.title,
+                            category = it.category,
                             description = it.description,
                             list = it.infoList,
                             onClickDetail = onClickDetail

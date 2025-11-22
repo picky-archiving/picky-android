@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import hackathon.picky.core.designsystem.theme.AppColors.White
-import hackathon.picky.core.designsystem.theme.LightGray
+import hackathon.picky.core.designsystem.theme.Gray100
 
 @Composable
 fun HomeTopBanner(
@@ -123,7 +123,7 @@ fun BannerCarousel(
                         .padding(horizontal = 2.dp)
                         .size(if (pagerState.currentPage == index) 8.dp else 6.dp)
                         .background(
-                            color = if (pagerState.currentPage == index) White else LightGray,
+                            color = if (pagerState.currentPage == index) White else Gray100,
                             shape = RoundedCornerShape(50)
                         )
                 )
