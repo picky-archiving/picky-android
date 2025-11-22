@@ -160,7 +160,7 @@ private fun HomeScreen(
                                 .verticalScroll(scrollState)
                         ) {
                             HomeTopBanner(
-                                listItem = uiState.topBannerList,
+                                bannerList = uiState.topBannerList,
                                 onClickDetail = onClickDetail,
                                 modifier = Modifier.padding(horizontal = 20.dp),
                                 onClickList = onClickList,

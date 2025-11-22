@@ -46,7 +46,7 @@ import hackathon.picky.feature.home.model.HomeUiTest
 
 @Composable
 fun HomeTopBanner(
-    listItem: List<CommonListItem>,
+    bannerList: List<Int>,
     onClickDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     onClickList: (Category) -> Unit
@@ -110,7 +110,7 @@ fun HomeTopBanner(
         Spacer(modifier = Modifier.height(12.dp))
 
         BannerCarousel(
-            listItem,
+            bannerList,
             onClickDetail = onClickDetail
         )
     }
@@ -118,7 +118,7 @@ fun HomeTopBanner(
 
 @Composable
 fun BannerCarousel(
-    listItem: List<CommonListItem>, // 로컬 이미지 리스트
+    bannerList: List<Int>, // drawable 리소스 ID 리스트
     onClickDetail: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -131,13 +131,13 @@ fun BannerCarousel(
     ) {
         // HorizontalPager
         HorizontalPager(
-            count = listItem.size,
+            count = bannerList.size,
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
-            AsyncImage(
-                model = listItem[page].imageUrl,
-                contentDescription = null,
+            Image(
+                painter = painterResource(id = bannerList[page]),
+                contentDescription = "Banner ${page + 1}",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
@@ -145,7 +145,7 @@ fun BannerCarousel(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(), // Material3 ripple
-                        onClick = { onClickDetail(listItem[page].id) }
+                        onClick = { onClickDetail(page) }
                     )
             )
         }
@@ -158,7 +158,7 @@ fun BannerCarousel(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 8.dp)
         ) {
-            repeat(listItem.size) { index ->
+            repeat(bannerList.size) { index ->
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
@@ -178,7 +178,13 @@ fun BannerCarousel(
 @Preview
 fun HomeTopBannerPrev() {
     HomeTopBanner(
-        listItem = HomeUiTest.infoSectionList[0].infoList,
+        bannerList = listOf(
+            R.drawable.banner_1,
+            R.drawable.banner_2,
+            R.drawable.banner_3,
+            R.drawable.banner_4,
+            R.drawable.banner_5
+        ),
         onClickDetail = { },
         onClickList = {}
     )

@@ -88,7 +88,6 @@ class HomeViewModel @Inject constructor(
                                 }
                             )
                         },
-                        topBannerList = emptyList(),
                         topList = data.incomePolicies.map {
                             CommonListItem(
                                 id = it.id.toInt(),
@@ -101,25 +100,6 @@ class HomeViewModel @Inject constructor(
                     )
                 }
             }.onFailure { }
-            policyRepository.getPolicyIncomeList().onSuccess {
-                _uiState.update { prev ->
-                    (prev as? HomeUiState.Main)?.let { mainState ->
-                        mainState.copy(
-                            topBannerList = it.map {
-                                CommonListItem(
-                                    id = it.id.toInt(),
-                                    title = it.title,
-                                    imageUrl = it.imageUrl,
-                                    closingDate = it.endDate,
-                                    viewCount = it.viewCount
-                                )
-                            }
-                        ) ?: prev
-                    } ?: prev
-                }
-            }.onFailure {
-
-            }
         }
     }
 
