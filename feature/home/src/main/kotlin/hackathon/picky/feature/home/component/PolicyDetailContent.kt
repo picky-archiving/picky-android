@@ -7,6 +7,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -176,24 +178,29 @@ internal fun PolicyDetailContent(
                 SectionTitle(title = "신청 자격")
                 Spacer(modifier = Modifier.height(Dimens.Space12))
 
-                policyDetail.eligibility.forEach { eligibility ->
-                    EligibilityChip(text = eligibility)
-                    Spacer(modifier = Modifier.height(Dimens.Space8))
-                }
+                EligibilityChipGroup(eligibility = policyDetail.eligibility)
 
                 Spacer(modifier = Modifier.height(Dimens.Space24))
 
                 // 정책 설명
                 SectionTitle(title = "정책 설명")
                 Spacer(modifier = Modifier.height(Dimens.Space12))
-                Text(
-                    text = policyDetail.description,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = AppColors.Black,
-                    lineHeight = 22.sp,
-                    modifier = Modifier.padding(bottom = Dimens.Space32)
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Gray100)
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = policyDetail.description,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = AppColors.Black,
+                        lineHeight = 22.sp
+                    )
+                }
+                Spacer(modifier = Modifier.height(Dimens.Space32))
             }
         }
     }
@@ -210,13 +217,27 @@ private fun SectionTitle(title: String) {
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun EligibilityChipGroup(eligibility: List<String>) {
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        eligibility.forEach { text ->
+            EligibilityChip(text = text)
+        }
+    }
+}
+
 @Composable
 private fun EligibilityChip(text: String) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(24.dp))
             .background(Gray100)
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
     ) {
         Text(
             text = text,
