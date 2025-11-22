@@ -15,4 +15,12 @@ class UserRepositoryImpl @Inject constructor(
             }
         )
     }
+
+    override suspend fun updateUserIncomeBracket(userId: Long, incomeBracket: Int): Result<Int> {
+        return userDatasource.updateUserIncomeBracket(userId, incomeBracket).toResult(
+            transform = { response ->
+                response.data.incomeBracket
+            }
+        )
+    }
 }
