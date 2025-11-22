@@ -22,4 +22,4 @@ val Black = Color(0xFF000000)
 
 val Primary = Color(0xFFF56D17)
 
-val Secondary = Color(0x1AFEF8F3)
+val Secondary = Color(0xFFFEF8F3)
