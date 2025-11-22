@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -41,12 +40,12 @@ import hackathon.picky.core.designsystem.theme.Gray400
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import hackathon.picky.core.model.Category
-import hackathon.picky.feature.home.model.HomeListItem
+import hackathon.picky.core.model.CommonListItem
 import hackathon.picky.feature.home.model.HomeUiTest
 
 @Composable
 fun HomeTopBanner(
-    listItem: List<HomeListItem>,
+    listItem: List<CommonListItem>,
     onClickDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     onClickList: (Category) -> Unit
@@ -98,7 +97,8 @@ fun HomeTopBanner(
                     painter = painterResource(id = R.drawable.back),
                     contentDescription = "rightArrow",
                     tint = Gray400,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier
+                        .size(16.dp)
                         .graphicsLayer {
                             scaleX = -1f // 좌우 반전
                         },
@@ -117,7 +117,7 @@ fun HomeTopBanner(
 
 @Composable
 fun BannerCarousel(
-    listItem: List<HomeListItem>, // 로컬 이미지 리스트
+    listItem: List<CommonListItem>, // 로컬 이미지 리스트
     onClickDetail: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {

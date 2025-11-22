@@ -1,15 +1,12 @@
 package hackathon.picky.feature.home
 
-import android.app.Activity
-import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hackathon.picky.core.model.Category
+import hackathon.picky.core.model.SearchFilter
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
-import hackathon.picky.feature.home.model.PolicyDetail
 import hackathon.picky.feature.home.model.policyDetailData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,8 +21,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
-    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiTest)
+    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Init)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    fun init(policyId: Int?) = viewModelScope.launch { // 초기 화면 설정
+        _uiState.update { prev ->
+            policyId?.let {
+                HomeUiState.Detail(
+                    previousUiState = null,
+                    policyDetail = policyDetailData,
+                    daysRemaining = calculateDaysRemaining("2024.09.28"),
+                    isBookmarked = false
+                )
+            } ?: HomeUiTest
+        }
+    }
+
 
     fun clickDetail(policyId: Int) = viewModelScope.launch {
         _uiState.update { prev ->
@@ -40,14 +51,28 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
 
     fun clickList(category: Category) = viewModelScope.launch {
-        _uiState.update {prev ->
+        val searchFilter =
+            (uiState.value as? HomeUiState.ListScreen)?.searchFilter ?: SearchFilter.RECENT
+        _uiState.update { prev ->
             HomeUiState.ListScreen(
                 previousUiState = prev,
                 list = HomeUiTest.infoSectionList[0].infoList,
-                category = category
+                category = category,
+                searchFilter = searchFilter
             )
         }
     }
+
+    fun onFilterChange(searchFilter: SearchFilter) {
+        _uiState.update { prev ->
+            (prev as? HomeUiState.ListScreen?)?.let {
+                it.copy(
+                    searchFilter = searchFilter
+                )
+            } ?: prev
+        }
+    }
+
     fun toggleBookmark() {
         val currentState = _uiState.value
         if (currentState is HomeUiState.Detail) {
@@ -69,16 +94,22 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun goBack(context: Context) {
+    fun goBack(onBackPressed: () -> Unit) {
         when (val state = _uiState.value) {
             is HomeUiState.Detail -> {
-                _uiState.value = state.previousUiState
+                (_uiState.value as HomeUiState.Detail).let {
+                    if (it.previousUiState != null) _uiState.value = state.previousUiState!!
+                    else onBackPressed()
+
+                }
             }
+
             is HomeUiState.ListScreen -> {
                 _uiState.value = state.previousUiState
             }
+
             else -> {
-                (context as? Activity)?.finish()
+                onBackPressed()
             }
         }
     }

@@ -5,35 +5,36 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import hackathon.picky.core.navigation.MainTabRoute
+import androidx.navigation.toRoute
 import hackathon.picky.core.navigation.Route
 
 fun NavController.navigateHome(
     navOptions: NavOptions
 ) {
-    navigate(MainTabRoute.Home, navOptions)
+    navigate(Route.Home, navOptions)
 }
 
 fun NavController.navigatePolicyDetail(
-    policyId: String
+    navOptions: NavOptions,
+    policyId: Int
 ) {
-    navigate(Route.PolicyDetail(policyId))
+    navigate(Route.Home(policyId), navOptions)
 }
 
-fun NavController.navigateMyPage() {
-    navigate(Route.MyPage)
-}
 
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
     navigateMy: () -> Unit,
-    navigateSearch: () -> Unit
+    navigateSearch: () -> Unit,
+    onBackPressed: () -> Unit
 ) {
-    composable<MainTabRoute.Home> {
+    composable<Route.Home> {
         HomeRoute(
             padding = padding,
             navigateMy = navigateMy,
-            navigateSearch = navigateSearch
+            navigateSearch = navigateSearch,
+            policyId = it.toRoute<Route.Home>().policyId,
+            onBackPressed = onBackPressed
         )
     }
 }
