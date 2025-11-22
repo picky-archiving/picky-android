@@ -1,6 +1,5 @@
 package hackathon.picky.core.designsystem.common
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -18,13 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.core.designsystem.R
+import coil.compose.AsyncImage
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import java.time.LocalDateTime
@@ -32,7 +30,7 @@ import java.time.LocalDateTime
 @Composable
 fun CommonListItemBox(
     id: Int,
-    imageRes: Int,
+    imageUrl: String,
     title: String,
     closingDate: LocalDateTime,
     onClickDetail: (Int) -> Unit,
@@ -58,8 +56,8 @@ fun CommonListItemBox(
                 .size(size)
                 .clip(RoundedCornerShape(8.dp))
         ) {
-            Image(
-                painter = painterResource(id = imageRes),
+            AsyncImage(
+                model = imageUrl,
                 contentDescription = null,
                 modifier = Modifier.matchParentSize()
             )
@@ -68,7 +66,7 @@ fun CommonListItemBox(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(4.dp),
-                localDateTime = closingDate,
+                closingDate = closingDate,
                 isAll = false,
             )
         }
@@ -92,7 +90,7 @@ fun CommonListItemBox(
 fun CommonListItemBoxPreview() {
     CommonListItemBox(
         id = 1,
-        imageRes = R.drawable.bookmark_selected,
+        imageUrl = "https://sosal.kr/1144?pidx=0",
         title = "친환경 제품 사용하고 계신가요?",
         closingDate = LocalDateTime.now().plusDays(5),
         onClickDetail = {}

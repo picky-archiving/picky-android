@@ -20,12 +20,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.theme.AppColors
+import hackathon.picky.core.model.CommonListItemTest
 import hackathon.picky.feature.home.component.PolicyDetailContent
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.mypage.component.BookmarkSection
 import hackathon.picky.feature.mypage.component.MyPageProfileCard
 import hackathon.picky.feature.mypage.component.RankSelectionBottomSheet
-import hackathon.picky.feature.mypage.model.BookmarkItem
 import hackathon.picky.feature.mypage.model.MyPageUiState
 import java.time.LocalDateTime
 
@@ -169,29 +169,11 @@ private val previewMyPageUiState = MyPageUiState.Main(
     rank = "3분위",
     showRankBottomSheet = false,
     bookmarkedPolicies = listOf(
-        BookmarkItem(
-            id = 1,
-            title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-            imageRes = R.drawable.ic_menu_camera,
-            closingDate = LocalDateTime.now().plusDays(13)
-        ),
-        BookmarkItem(
-            id = 2,
-            title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-            imageRes = R.drawable.ic_menu_compass,
-            closingDate = LocalDateTime.now().plusDays(13)
-        ),
-        BookmarkItem(
-            id = 3,
-            title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-            imageRes = R.drawable.ic_menu_agenda,
-            closingDate = LocalDateTime.now().plusDays(13)
-        ),
-        BookmarkItem(
-            id = 4,
-            title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-            imageRes = R.drawable.ic_menu_camera,
-            closingDate = LocalDateTime.now().plusDays(13)
-        )
+        CommonListItemTest,
+        CommonListItemTest,
+        CommonListItemTest,
+        CommonListItemTest,
+        CommonListItemTest,
+
     )
 )

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.designsystem.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.CommonListItemTest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,18 +24,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         _uiState.update { prev ->
             (prev as? SearchUiState.Success)?.copy(
                 searchResult = listOf(
-                    CommonListItem(
-                        id = 1,
-                        imageRes = R.drawable.bookmark_selected,
-                        title = "example",
-                        closingDate = LocalDateTime.now().plusDays(5),
-                    ),
-                    CommonListItem(
-                        id = 1,
-                        imageRes = R.drawable.bookmark_selected,
-                        title = "example",
-                        closingDate = LocalDateTime.now().plusDays(5),
-                    ),
+                    CommonListItemTest, CommonListItemTest
                 )
             ) ?: prev
         }

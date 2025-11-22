@@ -28,7 +28,7 @@ fun SearchListVerticalGridScroll(
         items(list) { item ->
             CommonListItemBox(
                 type = CommonListType.DYNAMIC,
-                imageRes = item.imageRes,
+                imageUrl = item.imageUrl,
                 title = item.title,
                 closingDate = item.closingDate,
                 onClickDetail = onClickDetail,

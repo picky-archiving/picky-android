@@ -2,10 +2,10 @@ package hackathon.picky.feature.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import hackathon.picky.feature.home.model.policyDetailData
-import hackathon.picky.feature.mypage.model.BookmarkItem
-import hackathon.picky.feature.mypage.model.MyPageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hackathon.picky.core.model.CommonListItemTest
+import hackathon.picky.feature.home.model.policyDetailData
+import hackathon.picky.feature.mypage.model.MyPageUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,42 +25,14 @@ class MyPageViewModel @Inject constructor() : ViewModel() {
             rank = "3분위",
             showRankBottomSheet = false,
             bookmarkedPolicies = listOf(
-                BookmarkItem(
-                    id = 1,
-                    title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-                    imageRes = android.R.drawable.ic_menu_camera,
-                    closingDate = LocalDateTime.now().plusDays(13)
-                ),
-                BookmarkItem(
-                    id = 2,
-                    title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-                    imageRes = android.R.drawable.ic_menu_camera,
-                    closingDate = LocalDateTime.now().plusDays(13)
-                ),
-                BookmarkItem(
-                    id = 3,
-                    title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-                    imageRes = android.R.drawable.ic_menu_camera,
-                    closingDate = LocalDateTime.now().plusDays(13)
-                ),
-                BookmarkItem(
-                    id = 4,
-                    title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-                    imageRes = android.R.drawable.ic_menu_camera,
-                    closingDate = LocalDateTime.now().plusDays(13)
-                ),
-                BookmarkItem(
-                    id = 5,
-                    title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-                    imageRes = android.R.drawable.ic_menu_camera,
-                    closingDate = LocalDateTime.now().plusDays(13)
-                ),
-                BookmarkItem(
-                    id = 6,
-                    title = "정책 관련 타이틀이 들어갑니다. 2줄 이상 예시입니...",
-                    imageRes = android.R.drawable.ic_menu_camera,
-                    closingDate = LocalDateTime.now().plusDays(13)
-                )
+                CommonListItemTest,
+                CommonListItemTest,
+                CommonListItemTest,
+                CommonListItemTest,
+                CommonListItemTest,
+                CommonListItemTest,
+                CommonListItemTest,
+                CommonListItemTest,
             )
         )
     )
