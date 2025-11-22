@@ -1,6 +1,5 @@
 package hackathon.picky.feature.home.component
 
-import android.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,31 +25,42 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.core.designsystem.R
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import hackathon.picky.core.designsystem.theme.AppColors.White
 import hackathon.picky.core.designsystem.theme.Gray100
+import hackathon.picky.core.designsystem.theme.Gray400
+import hackathon.picky.core.designsystem.theme.Gray900
+import hackathon.picky.core.designsystem.theme.PretendardFontFamily
+import hackathon.picky.core.model.Category
+import hackathon.picky.feature.home.model.HomeListItem
+import hackathon.picky.feature.home.model.HomeUiTest
 
 @Composable
 fun HomeTopBanner(
-    imageList: List<Int>,
-    onClickDetail: () -> Unit
+    listItem: List<HomeListItem>,
+    onClickDetail: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    onClickList: (Category) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         Row(
-
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(R.drawable.ic_menu_camera),
+                painter = painterResource(R.drawable.ic_fire),
                 contentDescription = null,
                 modifier = Modifier
                     .size(20.dp)
@@ -60,15 +71,45 @@ fun HomeTopBanner(
 
             Text(
                 text = "MD PICK 금주의 공고",
-                style = MaterialTheme.typography.bodyLarge,
+                fontFamily = PretendardFontFamily,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Gray900,
                 modifier = Modifier.weight(1f) // 왼쪽 정렬, 오른쪽 더보기는 끝으로
             )
+
+            // 오른쪽 더보기 + 화살표
+            Row(
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClick = { onClickList(Category.TOP) }
+                ),
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "더보기",
+                    fontFamily = PretendardFontFamily,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Gray400
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.back),
+                    contentDescription = "rightArrow",
+                    tint = Gray400,
+                    modifier = Modifier.size(16.dp)
+                        .graphicsLayer {
+                            scaleX = -1f // 좌우 반전
+                        },
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
         BannerCarousel(
-            imageList,
+            listItem,
             onClickDetail = onClickDetail
         )
     }
@@ -76,8 +117,8 @@ fun HomeTopBanner(
 
 @Composable
 fun BannerCarousel(
-    imageUrls: List<Int>, // 로컬 이미지 리스트
-    onClickDetail: () -> Unit,
+    listItem: List<HomeListItem>, // 로컬 이미지 리스트
+    onClickDetail: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState()
@@ -89,13 +130,13 @@ fun BannerCarousel(
     ) {
         // HorizontalPager
         HorizontalPager(
-            count = imageUrls.size,
+            count = listItem.size,
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
 
             Image(
-                painter = painterResource(imageUrls[page]),
+                painter = painterResource(listItem[page].imageRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -104,7 +145,7 @@ fun BannerCarousel(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(), // Material3 ripple
-                        onClick = { onClickDetail() }
+                        onClick = { onClickDetail(listItem[page].id) }
                     )
             )
         }
@@ -117,7 +158,7 @@ fun BannerCarousel(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 8.dp)
         ) {
-            repeat(imageUrls.size) { index ->
+            repeat(listItem.size) { index ->
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
@@ -137,11 +178,8 @@ fun BannerCarousel(
 @Preview
 fun HomeTopBannerPrev() {
     HomeTopBanner(
-        imageList = listOf(
-            R.drawable.ic_menu_camera,
-            R.drawable.ic_menu_compass,
-            R.drawable.ic_menu_gallery
-        ),
-        onClickDetail = { }
+        listItem = HomeUiTest.infoSectionList[0].infoList,
+        onClickDetail = { },
+        onClickList = {}
     )
 }

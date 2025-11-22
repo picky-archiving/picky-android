@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -18,8 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import hackathon.picky.core.designsystem.common.BackTopBar
+import hackathon.picky.core.designsystem.common.LogoTopBar
+import hackathon.picky.core.designsystem.theme.Gray50
+import hackathon.picky.core.model.Category
 import hackathon.picky.feature.home.component.HomeInfoSection
 import hackathon.picky.feature.home.component.HomeTopBanner
+import hackathon.picky.feature.home.component.ListScroll
 import hackathon.picky.feature.home.component.PolicyDetailContent
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
@@ -28,6 +36,7 @@ import hackathon.picky.feature.home.model.HomeUiTest
 internal fun HomeRoute(
     padding: PaddingValues,
     navigateMy: () -> Unit,
+    navigateSearch: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -40,19 +49,26 @@ internal fun HomeRoute(
     HomeScreen(
         padding = padding,
         uiState = uiState.value,
-        onBackClick = {},
+        onBackClick = { viewModel.goBack(context) },
         onBookMarClick = viewModel::toggleBookmark,
         onClickDetail = viewModel::clickDetail,
+        navigateMy = navigateMy,
+        navigateSearch = navigateSearch,
+        onClickList = viewModel::clickList
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
     padding: PaddingValues,
     uiState: HomeUiState,
-    onClickDetail: () -> Unit,
+    onClickDetail: (Int) -> Unit,
     onBackClick: () -> Unit,
-    onBookMarClick: () -> Unit
+    onBookMarClick: () -> Unit,
+    onClickList: (category: Category) -> Unit,
+    navigateMy: () -> Unit,
+    navigateSearch: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -61,29 +77,54 @@ private fun HomeScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(padding)
-
     ) {
         when (uiState) {
             is HomeUiState.Main -> {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp)
-                        .verticalScroll(scrollState)
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    HomeTopBanner(
-                        imageList = uiState.topBannerList,
-                        onClickDetail = onClickDetail
+                    LogoTopBar(
+                        onClickSearch = { navigateSearch() },
+                        onClickMy = { navigateMy() }
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
-                    (uiState as HomeUiState.Main).infoSectionList.forEach {
-                        HomeInfoSection(
-                            category = it.category,
-                            description = it.description,
-                            list = it.infoList,
-                            onClickDetail = onClickDetail
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(scrollState)
+                    ) {
+                        HomeTopBanner(
+                            listItem = uiState.topBannerList,
+                            onClickDetail = onClickDetail,
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            onClickList = onClickList,
                         )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        HomeInfoSection(
+                            list = uiState.topList,
+                            onClickDetail = onClickDetail,
+                            onClickList = onClickList,
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        (uiState as HomeUiState.Main).infoSectionList.forEach { item ->
+                            HorizontalDivider(Modifier.height(8.dp), color = Gray50)
+
+                            HomeInfoSection(
+                                category = item.category,
+                                description = item.description,
+                                list = item.infoList,
+                                onClickDetail = onClickDetail,
+                                onClickList = onClickList,
+                                modifier = Modifier.padding(horizontal = 20.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -94,6 +135,22 @@ private fun HomeScreen(
                     onBackClick = onBackClick,
                     onBookmarkClick = onBookMarClick
                 )
+            }
+
+            is HomeUiState.ListScreen -> {
+                val listUiState = uiState as HomeUiState.ListScreen
+
+                BackTopBar(
+                    title = listUiState.category.label,
+                    onClickBack = onBackClick
+                )
+
+                ListScroll(
+                    list = listUiState.list,
+                    onClickDetail = onClickDetail,
+                    modifier = Modifier.padding(20.dp)
+                )
+
             }
 
             else -> {}
@@ -110,5 +167,8 @@ fun HomeScreenPrev() {
         onBackClick = {},
         onBookMarClick = { },
         onClickDetail = { },
+        navigateMy = { },
+        navigateSearch = {},
+        onClickList = {}
     )
 }

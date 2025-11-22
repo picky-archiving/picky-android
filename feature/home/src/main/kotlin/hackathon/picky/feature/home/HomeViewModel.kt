@@ -6,10 +6,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hackathon.picky.core.model.Category
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
 import hackathon.picky.feature.home.model.PolicyDetail
-import hackathon.picky.feature.home.model.PolicyDetailUiState
 import hackathon.picky.feature.home.model.policyDetailData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +27,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiTest)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    fun clickDetail() = viewModelScope.launch {
+    fun clickDetail(policyId: Int) = viewModelScope.launch {
         _uiState.update { prev ->
             HomeUiState.Detail(
                 previousUiState = prev,
@@ -39,6 +39,15 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     }
 
 
+    fun clickList(category: Category) = viewModelScope.launch {
+        _uiState.update {prev ->
+            HomeUiState.ListScreen(
+                previousUiState = prev,
+                list = HomeUiTest.infoSectionList[0].infoList,
+                category = category
+            )
+        }
+    }
     fun toggleBookmark() {
         val currentState = _uiState.value
         if (currentState is HomeUiState.Detail) {
@@ -63,6 +72,9 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     fun goBack(context: Context) {
         when (val state = _uiState.value) {
             is HomeUiState.Detail -> {
+                _uiState.value = state.previousUiState
+            }
+            is HomeUiState.ListScreen -> {
                 _uiState.value = state.previousUiState
             }
             else -> {

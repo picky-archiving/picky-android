@@ -7,7 +7,8 @@ import java.time.LocalDateTime
 sealed class HomeUiState {
     data class Main(
         val infoSectionList: List<HomeSectionListItem>,
-        val topBannerList: List<Int> // url 반환 시 String으로, HomeTopBanner도 그에 맞게 변경
+        val topBannerList: List<HomeListItem>, // url 반환 시 String으로, HomeTopBanner도 그에 맞게 변경
+        val topList: List<HomeListItem>
     ) : HomeUiState()
 
     data class Detail(
@@ -15,6 +16,12 @@ sealed class HomeUiState {
         val policyDetail: PolicyDetail,
         val daysRemaining: Int,
         val isBookmarked: Boolean = false
+    ) : HomeUiState()
+
+    data class ListScreen(
+        val previousUiState: HomeUiState,
+        val list: List<HomeListItem>,
+        val category: Category
     ) : HomeUiState()
 
     data object Init : HomeUiState()
@@ -28,16 +35,19 @@ val HomeUiTest = HomeUiState.Main(
             titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
                 HomeListItem(
-                    imageRes = R.drawable.ic_menu_camera,
-                    title = "Item 1",
+                    id = 1,
+                    imageRes = R.drawable.ic_menu_camera, title = "Item 1",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
                 HomeListItem(
+                    id = 2,
                     imageRes = R.drawable.ic_menu_compass, title = "Item 2",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
                 HomeListItem(
-                    imageRes = R.drawable.ic_menu_agenda, title = "Item 3",
+                    id = 3,
+                    imageRes = R.drawable.ic_menu_agenda,
+                    title = "Item 3",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
             ),
@@ -49,14 +59,17 @@ val HomeUiTest = HomeUiState.Main(
             titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
                 HomeListItem(
+                    id = 1,
                     imageRes = R.drawable.ic_menu_camera, title = "Item 1",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
                 HomeListItem(
+                    id = 2,
                     imageRes = R.drawable.ic_menu_compass, title = "Item 2",
                     closingDate = LocalDateTime.now().plusDays(3)
                 ),
                 HomeListItem(
+                    id = 3,
                     imageRes = R.drawable.ic_menu_agenda,
                     title = "Item 3",
                     closingDate = LocalDateTime.now().plusDays(3)
@@ -66,10 +79,33 @@ val HomeUiTest = HomeUiState.Main(
         ),
     ),
     topBannerList = listOf(
-        R.drawable.ic_menu_camera,
-        R.drawable.ic_menu_camera,
-        R.drawable.ic_menu_camera
-    )
+        HomeListItem(
+            id = 1,
+            imageRes = R.drawable.ic_menu_camera,
+            title = "Banner 1",
+            closingDate = LocalDateTime.now().plusDays(5)
+        ),
+        HomeListItem(
+            id = 2,
+            imageRes = R.drawable.ic_menu_compass,
+            title = "Banner 2",
+            closingDate = LocalDateTime.now().plusDays(5)
+        ),
+    ),
+    topList =  listOf(
+        HomeListItem(
+            id = 1,
+            imageRes = R.drawable.ic_menu_camera,
+            title = "Banner 1",
+            closingDate = LocalDateTime.now().plusDays(5)
+        ),
+        HomeListItem(
+            id = 2,
+            imageRes = R.drawable.ic_menu_compass,
+            title = "Banner 2",
+            closingDate = LocalDateTime.now().plusDays(5)
+        ),
+    ),
 )
 
 val policyDetailData = PolicyDetail(

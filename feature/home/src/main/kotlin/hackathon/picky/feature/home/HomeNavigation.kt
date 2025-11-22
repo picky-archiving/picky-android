@@ -23,11 +23,13 @@ fun NavController.navigatePolicyDetail(
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
     navigateMy: () -> Unit,
+    navigateSearch: () -> Unit
 ) {
     composable<MainTabRoute.Home> {
         HomeRoute(
             padding = padding,
-            navigateMy = navigateMy
+            navigateMy = navigateMy,
+            navigateSearch = navigateSearch
         )
     }
 }
