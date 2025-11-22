@@ -6,6 +6,7 @@ import hackathon.picky.core.data.model.policy.PolicyDetailEntity
 import hackathon.picky.core.network.datasource.policy.PolicyDatasource
 import hackathon.picky.core.network.di.FakeDataSource
 import hackathon.picky.core.network.di.RealDataSource
+import hackathon.picky.core.network.model.response.BookmarkedPolicyPageData
 import hackathon.picky.core.network.model.response.HomeData
 import hackathon.picky.core.network.model.response.PolicyDetailData
 import hackathon.picky.core.network.model.response.PolicyPageData
@@ -34,6 +35,17 @@ class PolicyRepositoryImpl @Inject constructor(
         return policyDatasource.getPolicyDetail(policyId).toResult(
             transform = { response ->
                 response.data.toEntity()
+            }
+        )
+    }
+
+    override suspend fun getBookmarkedPolicies(
+        page: Int,
+        size: Int
+    ): Result<BookmarkedPolicyPageData> {
+        return policyDatasource.getBookmarkedPolicies(page, size).toResult(
+            transform = { response ->
+                response.data
             }
         )
     }
