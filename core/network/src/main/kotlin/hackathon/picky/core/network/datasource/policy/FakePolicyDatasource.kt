@@ -1,6 +1,9 @@
 package hackathon.picky.core.network.datasource.policy
 
 import hackathon.picky.core.network.model.ApiResponse
+import hackathon.picky.core.network.model.response.BookmarkedPolicy
+import hackathon.picky.core.network.model.response.BookmarkedPolicyPageData
+import hackathon.picky.core.network.model.response.BookmarkedPolicyResponse
 import hackathon.picky.core.network.model.response.CategoryGroup
 import hackathon.picky.core.network.model.response.HomeData
 import hackathon.picky.core.network.model.response.HomeResponse
@@ -236,6 +239,120 @@ class FakePolicyDatasource @Inject constructor() : PolicyDatasource {
             message = "success",
             success = true,
             timestamp = "2025-11-23T00:25:16.0298456"
+        )
+
+        return ApiResponse.Success(response)
+    }
+
+    override suspend fun getBookmarkedPolicies(
+        page: Int,
+        size: Int
+    ): ApiResponse<BookmarkedPolicyResponse> {
+        delay(500) // 네트워크 지연 시뮬레이션
+
+        val bookmarkedPolicies = listOf(
+            BookmarkedPolicy(
+                id = 4,
+                title = "햇살론 청년",
+                category = "금융",
+                host = "금융위원회",
+                always = false,
+                bookmarked = true,
+                startDate = "2025-03-01",
+                endDate = "2025-07-31",
+                dDay = -115,
+                imageUrl = null,
+                viewCount = 0
+            ),
+            BookmarkedPolicy(
+                id = 11,
+                title = "청년 매입임대주택",
+                category = "주거",
+                host = "국토교통부",
+                always = false,
+                bookmarked = true,
+                startDate = "2025-01-20",
+                endDate = "2025-12-20",
+                dDay = 215,
+                imageUrl = "https://fastly.picsum.photos/id/765/536/354.jpg?hmac=KdMEeWclG6G7uEBwImE8VC-vX6j6B7b2NbtqQNF80R0",
+                viewCount = 550
+            ),
+            BookmarkedPolicy(
+                id = 1,
+                title = "청년 취업 바우처",
+                category = "취업",
+                host = "고용노동부",
+                always = false,
+                bookmarked = true,
+                startDate = "2025-01-01",
+                endDate = "2025-06-30",
+                dDay = 45,
+                imageUrl = "https://fastly.picsum.photos/id/765/536/354.jpg?hmac=KdMEeWclG6G7uEBwImE8VC-vX6j6B7b2NbtqQNF80R0",
+                viewCount = 150
+            ),
+            BookmarkedPolicy(
+                id = 5,
+                title = "국가장학금 Ⅱ유형",
+                category = "교육",
+                host = "교육부",
+                always = false,
+                bookmarked = true,
+                startDate = "2025-02-01",
+                endDate = "2025-05-31",
+                dDay = 15,
+                imageUrl = "https://fastly.picsum.photos/id/765/536/354.jpg?hmac=KdMEeWclG6G7uEBwImE8VC-vX6j6B7b2NbtqQNF80R0",
+                viewCount = 800
+            ),
+            BookmarkedPolicy(
+                id = 12,
+                title = "소득연계 학자금 대출",
+                category = "교육",
+                host = "교육부",
+                always = true,
+                bookmarked = true,
+                startDate = "2025-01-01",
+                endDate = "2025-12-31",
+                dDay = 350,
+                imageUrl = "https://fastly.picsum.photos/id/765/536/354.jpg?hmac=KdMEeWclG6G7uEBwImE8VC-vX6j6B7b2NbtqQNF80R0",
+                viewCount = 670
+            ),
+            BookmarkedPolicy(
+                id = 3,
+                title = "청년 전세자금 대출",
+                category = "주거",
+                host = "국토교통부",
+                always = false,
+                bookmarked = true,
+                startDate = "2025-01-15",
+                endDate = "2025-12-31",
+                dDay = 350,
+                imageUrl = "https://fastly.picsum.photos/id/765/536/354.jpg?hmac=KdMEeWclG6G7uEBwImE8VC-vX6j6B7b2NbtqQNF80R0",
+                viewCount = 320
+            )
+        )
+
+        // 페이지네이션 처리
+        val startIndex = page * size
+        val endIndex = minOf(startIndex + size, bookmarkedPolicies.size)
+        val pagedPolicies = if (startIndex < bookmarkedPolicies.size) {
+            bookmarkedPolicies.subList(startIndex, endIndex)
+        } else {
+            emptyList()
+        }
+
+        val pageData = BookmarkedPolicyPageData(
+            page = page,
+            content = pagedPolicies,
+            size = size,
+            totalElements = bookmarkedPolicies.size,
+            totalPages = (bookmarkedPolicies.size + size - 1) / size
+        )
+
+        val response = BookmarkedPolicyResponse(
+            data = pageData,
+            message = "북마크된 정책 조회에 성공했습니다.",
+            success = true,
+            timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
         )
 
         return ApiResponse.Success(response)
