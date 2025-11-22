@@ -25,15 +25,13 @@ internal fun SearchRoute(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-
     BackHandler(enabled = uiState.value is SearchUiState) {
-        backDispatcher?.onBackPressed()
+        onBackPressed()
     }
 
     SearchScreen(
         padding = padding,
-        onBackClick = { backDispatcher?.onBackPressed() },
+        onBackClick = { onBackPressed() },
         uiState = uiState.value,
         onChangeQuery = viewModel::onChangeQuery,
         onClickSearch = viewModel::onClickSearch,

@@ -2,6 +2,8 @@ package hackathon.picky.feature.home
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -83,96 +85,100 @@ private fun HomeScreen(
     onFilterChange: (SearchFilter) -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(padding)
-    ) {
-        when (uiState) {
-            is HomeUiState.Main -> {
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    LogoTopBar(
-                        onClickSearch = { navigateSearch() },
-                        onClickMy = { navigateMy() }
-                    )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
+    Crossfade(
+        targetState = uiState,
+        animationSpec = tween(durationMillis = 500)
+    ) { uiState ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(padding)
+        ) {
+            when (uiState) {
+                is HomeUiState.Main -> {
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(scrollState)
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        HomeTopBanner(
-                            listItem = uiState.topBannerList,
-                            onClickDetail = onClickDetail,
-                            modifier = Modifier.padding(horizontal = 20.dp),
-                            onClickList = onClickList,
+                        LogoTopBar(
+                            onClickSearch = { navigateSearch() },
+                            onClickMy = { navigateMy() }
                         )
 
                         Spacer(modifier = Modifier.height(20.dp))
 
-                        HomeInfoSection(
-                            list = uiState.topList,
-                            onClickDetail = onClickDetail,
-                            onClickList = onClickList,
-                            modifier = Modifier.padding(horizontal = 20.dp)
-                        )
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(scrollState)
+                        ) {
+                            HomeTopBanner(
+                                listItem = uiState.topBannerList,
+                                onClickDetail = onClickDetail,
+                                modifier = Modifier.padding(horizontal = 20.dp),
+                                onClickList = onClickList,
+                            )
 
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        (uiState as HomeUiState.Main).infoSectionList.forEach { item ->
-                            HorizontalDivider(Modifier.height(8.dp), color = Gray50)
+                            Spacer(modifier = Modifier.height(20.dp))
 
                             HomeInfoSection(
-                                category = item.category,
-                                description = item.description,
-                                list = item.infoList,
+                                list = uiState.topList,
                                 onClickDetail = onClickDetail,
                                 onClickList = onClickList,
                                 modifier = Modifier.padding(horizontal = 20.dp)
                             )
+
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            (uiState as HomeUiState.Main).infoSectionList.forEach { item ->
+                                HorizontalDivider(Modifier.height(8.dp), color = Gray50)
+
+                                HomeInfoSection(
+                                    category = item.category,
+                                    description = item.description,
+                                    list = item.infoList,
+                                    onClickDetail = onClickDetail,
+                                    onClickList = onClickList,
+                                    modifier = Modifier.padding(horizontal = 20.dp)
+                                )
+                            }
                         }
                     }
                 }
+
+                is HomeUiState.Detail -> {
+                    PolicyDetailContent(
+                        uiState = uiState as HomeUiState.Detail,
+                        onBackClick = onBackClick,
+                        onBookmarkClick = onBookMarClick
+                    )
+                }
+
+                is HomeUiState.ListScreen -> {
+                    val listUiState = uiState as HomeUiState.ListScreen
+
+                    BackTopBar(
+                        title = listUiState.category.label,
+                        onClickBack = onBackClick
+                    )
+
+                    ListInfoFilterSection(
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                        listCount = listUiState.list.size,
+                        filter = listUiState.searchFilter,
+                        onFilterChange = onFilterChange
+                    )
+
+                    HomeListVerticalGridScroll(
+                        list = listUiState.list,
+                        onClickDetail = onClickDetail,
+                        modifier = Modifier.padding(20.dp)
+                    )
+
+                }
+
+                else -> {}
             }
-
-            is HomeUiState.Detail -> {
-                PolicyDetailContent(
-                    uiState = uiState as HomeUiState.Detail,
-                    onBackClick = onBackClick,
-                    onBookmarkClick = onBookMarClick
-                )
-            }
-
-            is HomeUiState.ListScreen -> {
-                val listUiState = uiState as HomeUiState.ListScreen
-
-                BackTopBar(
-                    title = listUiState.category.label,
-                    onClickBack = onBackClick
-                )
-
-                ListInfoFilterSection(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    listCount = listUiState.list.size,
-                    filter = listUiState.searchFilter,
-                    onFilterChange = onFilterChange
-                )
-
-                HomeListVerticalGridScroll(
-                    list = listUiState.list,
-                    onClickDetail = onClickDetail,
-                    modifier = Modifier.padding(20.dp)
-                )
-
-            }
-
-            else -> {}
         }
     }
 }

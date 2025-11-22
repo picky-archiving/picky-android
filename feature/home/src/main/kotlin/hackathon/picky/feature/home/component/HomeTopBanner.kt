@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.core.designsystem.R
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -134,9 +135,8 @@ fun BannerCarousel(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
-
-            Image(
-                painter = painterResource(listItem[page].imageRes),
+            AsyncImage(
+                model = listItem[page].imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

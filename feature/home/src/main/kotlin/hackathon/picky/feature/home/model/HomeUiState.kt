@@ -3,8 +3,8 @@ package hackathon.picky.feature.home.model
 import android.R
 import hackathon.picky.core.model.Category
 import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.CommonListItemTest
 import hackathon.picky.core.model.SearchFilter
-import java.time.LocalDateTime
 
 sealed class HomeUiState {
     data class Main(
@@ -30,6 +30,7 @@ sealed class HomeUiState {
     data object Init : HomeUiState()
 }
 
+
 val HomeUiTest = HomeUiState.Main(
     infoSectionList = listOf(
         HomeSectionListItem(
@@ -37,22 +38,7 @@ val HomeUiTest = HomeUiState.Main(
             description = "당신을 위한 맞춤 추천",
             titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
-                CommonListItem(
-                    id = 1,
-                    imageRes = R.drawable.ic_menu_camera, title = "Item 1",
-                    closingDate = LocalDateTime.now().plusDays(3)
-                ),
-                CommonListItem(
-                    id = 2,
-                    imageRes = R.drawable.ic_menu_compass, title = "Item 2",
-                    closingDate = LocalDateTime.now().plusDays(3)
-                ),
-                CommonListItem(
-                    id = 3,
-                    imageRes = R.drawable.ic_menu_agenda,
-                    title = "Item 3",
-                    closingDate = LocalDateTime.now().plusDays(3)
-                ),
+                CommonListItemTest, CommonListItemTest, CommonListItemTest
             ),
             category = Category.EDUCATION,
         ),
@@ -61,53 +47,16 @@ val HomeUiTest = HomeUiState.Main(
             description = "당신을 위한 맞춤 추천",
             titleImageRes = R.drawable.ic_menu_camera,
             infoList = listOf(
-                CommonListItem(
-                    id = 1,
-                    imageRes = R.drawable.ic_menu_camera, title = "Item 1",
-                    closingDate = LocalDateTime.now().plusDays(3)
-                ),
-                CommonListItem(
-                    id = 2,
-                    imageRes = R.drawable.ic_menu_compass, title = "Item 2",
-                    closingDate = LocalDateTime.now().plusDays(3)
-                ),
-                CommonListItem(
-                    id = 3,
-                    imageRes = R.drawable.ic_menu_agenda,
-                    title = "Item 3",
-                    closingDate = LocalDateTime.now().plusDays(3)
-                ),
+                CommonListItemTest, CommonListItemTest, CommonListItemTest
             ),
             category = Category.EMPLOYMENT,
         ),
     ),
     topBannerList = listOf(
-        CommonListItem(
-            id = 1,
-            imageRes = R.drawable.ic_menu_camera,
-            title = "Banner 1",
-            closingDate = LocalDateTime.now().plusDays(5)
-        ),
-        CommonListItem(
-            id = 2,
-            imageRes = R.drawable.ic_menu_compass,
-            title = "Banner 2",
-            closingDate = LocalDateTime.now().plusDays(5)
-        ),
+        CommonListItemTest, CommonListItemTest
     ),
     topList = listOf(
-        CommonListItem(
-            id = 1,
-            imageRes = R.drawable.ic_menu_camera,
-            title = "Banner 1",
-            closingDate = LocalDateTime.now().plusDays(5)
-        ),
-        CommonListItem(
-            id = 2,
-            imageRes = R.drawable.ic_menu_compass,
-            title = "Banner 2",
-            closingDate = LocalDateTime.now().plusDays(5)
-        ),
+        CommonListItemTest, CommonListItemTest
     ),
 )
 

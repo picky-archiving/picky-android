@@ -22,11 +22,11 @@ import hackathon.picky.core.designsystem.common.CommonListType
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import hackathon.picky.core.designsystem.theme.Primary
-import hackathon.picky.feature.mypage.model.BookmarkItem
+import hackathon.picky.core.model.CommonListItem
 
 @Composable
 internal fun BookmarkSection(
-    bookmarkedPolicies: List<BookmarkItem>,
+    bookmarkedPolicies: List<CommonListItem>,
     onClickDetail: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -69,7 +69,7 @@ internal fun BookmarkSection(
                     rowItems.forEach { item ->
                         CommonListItemBox(
                             id = item.id,
-                            imageRes = item.imageRes,
+                            imageUrl = item.imageUrl,
                             title = item.title,
                             closingDate = item.closingDate,
                             onClickDetail = onClickDetail,

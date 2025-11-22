@@ -22,10 +22,10 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 @Composable
-fun DateBox(localDateTime: LocalDateTime, isAll: Boolean = false, modifier: Modifier = Modifier) {
+fun DateBox(closingDate: LocalDateTime, isAll: Boolean = false, modifier: Modifier = Modifier) {
 
-    val daysRemaining = remember(localDateTime) {
-        ChronoUnit.DAYS.between(LocalDate.now(), localDateTime.toLocalDate())
+    val daysRemaining = remember(closingDate) {
+        ChronoUnit.DAYS.between(LocalDate.now(), closingDate.toLocalDate())
     }
 
     // 마감 여부

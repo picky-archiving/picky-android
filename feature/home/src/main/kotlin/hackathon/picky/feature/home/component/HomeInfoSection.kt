@@ -128,7 +128,7 @@ fun HomeInfoSection(
             items(list) { item ->
                 CommonListItemBox(
                     type = CommonListType.FIX,
-                    imageRes = item.imageRes,
+                    imageUrl = item.imageUrl,
                     title = item.title,
                     onClickDetail = onClickDetail,
                     closingDate = item.closingDate,
@@ -156,7 +156,7 @@ fun HomeInfoSectionPrev() {
 @Preview
 fun CommonListItemBoxPrev() {
     CommonListItemBox(
-        imageRes = R.drawable.bookmark_selected,
+        imageUrl = "https://sosal.kr/1144?pidx=0",
         title = "exampleasasasasasasas",
         onClickDetail = { },
         closingDate = LocalDateTime.now(),
