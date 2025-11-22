@@ -38,6 +38,7 @@ fun HomeTopBanner(
             .fillMaxWidth()
     ) {
         Row(
+
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
