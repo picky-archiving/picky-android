@@ -1,5 +1,6 @@
 package hackathon.picky.feature.home.model
 
+import com.example.core.designsystem.R
 import hackathon.picky.core.model.common.Category
 import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.core.model.common.CommonListItemTest
@@ -9,8 +10,15 @@ import java.time.LocalDate
 sealed class HomeUiState {
     data class Main(
         val infoSectionList: List<HomeSectionListItem>,
-        val topBannerList: List<CommonListItem>, // url 반환 시 String으로, HomeTopBanner도 그에 맞게 변경
-        val topList: List<CommonListItem>
+        val topBannerList: List<Int> = listOf(
+            R.drawable.banner_1,
+            R.drawable.banner_2,
+            R.drawable.banner_3,
+            R.drawable.banner_4,
+            R.drawable.banner_5
+        ), // 배너 이미지 리소스 ID 리스트
+        val topList: List<CommonListItem>,
+        val isRefreshing: Boolean = false
     ) : HomeUiState()
 
     data class Detail(
@@ -48,9 +56,6 @@ val HomeUiTest = HomeUiState.Main(
             ),
             category = Category.EMPLOYMENT,
         ),
-    ),
-    topBannerList = listOf(
-        CommonListItemTest, CommonListItemTest
     ),
     topList = listOf(
         CommonListItemTest, CommonListItemTest
