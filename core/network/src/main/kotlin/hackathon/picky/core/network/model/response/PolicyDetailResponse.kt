@@ -39,7 +39,7 @@ data class PolicyDetailData(
     val url: String, // 정책 세부 내용을 확인할 수 있는 정적 페이지 또는 외부 링크
 
     @SerialName("limitIncomeBracket")
-    val limitIncomeBracket: Long, // 신청 가능한 최대 소득분위 (예: 4 = 4분위 이하 지원 가능)
+    val limitIncomeBracket: Long?, // 신청 가능한 최대 소득분위 (예: 4 = 4분위 이하 지원 가능, null이면 제한 없음)
 
     @SerialName("imageUrl")
     val imageUrl: String, // 정책 이미지 경로 (정적 파일)
@@ -54,10 +54,10 @@ data class PolicyDetailData(
     val always: Boolean, // 상시 정책 여부 (true: 기간 제한 없음, false: 기간 제한 있음)
 
     @SerialName("startDate")
-    val startDate: String, // 정책 시작일 (형식: "2025-01-15")
+    val startDate: String?, // 정책 시작일 (형식: "2025-01-15", 상시모집인 경우 null)
 
     @SerialName("endDate")
-    val endDate: String? = null, // 정책 종료일 (형식: "2025-05-31", 상시모집인 경우 null)
+    val endDate: String?, // 정책 종료일 (형식: "2025-05-31", 상시모집인 경우 null)
 
     @SerialName("viewCount")
     val viewCount: Long, // 해당 정책의 총 조회수
