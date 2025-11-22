@@ -28,30 +28,6 @@ class MainNavigator(
         restoreState = true
     }
 
-    val currentTab: MainTab?
-        @Composable get() = MainTab.find { tab ->
-            currentDestination?.hasRoute(tab::class) == true
-        }
-
-    fun navigate(tab: MainTab) {
-        val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                inclusive = true  //  백스택에서 제거됨
-            }
-            launchSingleTop = true
-        }
-
-        when (tab) {
-            MainTab.HOME -> navController.navigateHome(navOptions)
-            MainTab.MY -> {}
-        }
-    }
-
-    @Composable
-    fun shouldShowBottomBar() = MainTab.contains {
-        currentDestination?.hasRoute(it::class) == true
-    }
-
     fun navigateHome() {
         navController.navigateHome(singleTopOptions)
     }

@@ -1,7 +1,5 @@
 package hackathon.picky.feature.main
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -12,9 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.feature.main.R
-import hackathon.picky.feature.main.component.MainBottomBar
 import hackathon.picky.feature.main.component.MainNavHost
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -59,17 +55,6 @@ private fun MainScreenContent(
                 navigator = navigator,
                 padding = padding,
                 onShowErrorSnackBar = onShowErrorSnackBar,
-            )
-        },
-        bottomBar = {
-            MainBottomBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding(), // ✅ 유지
-                visible = false,//navigator.shouldShowBottomBar(),
-                tabs = MainTab.entries.toPersistentList(),
-                currentTab = navigator.currentTab,
-                onTabSelected = { navigator.navigate(it) }
             )
         },
         snackbarHost = { SnackbarHost(snackBarHostState) }
