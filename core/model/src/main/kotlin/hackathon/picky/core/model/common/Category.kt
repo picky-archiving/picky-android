@@ -12,7 +12,13 @@ enum class Category(val label: String, @DrawableRes val iconResId: Int, val desc
 
     companion object {
         fun fromLabel(label: String): Category {
-            return values().firstOrNull { it.label == label } ?: TOP
+            return when (label.lowercase()) {
+                "finance" -> FINANCE
+                "employment" -> EMPLOYMENT
+                "education" -> EDUCATION
+                "housing" -> RESIDENCE
+                else -> TOP
+            }
         }
     }
 }
