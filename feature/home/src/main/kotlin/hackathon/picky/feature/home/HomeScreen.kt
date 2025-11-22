@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,8 +26,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.common.LogoTopBar
 import hackathon.picky.core.designsystem.theme.Gray50
-import hackathon.picky.core.model.Category
-import hackathon.picky.core.model.SearchFilter
+import hackathon.picky.core.model.common.Category
+import hackathon.picky.core.model.common.SearchFilter
 import hackathon.picky.feature.home.component.HomeInfoSection
 import hackathon.picky.feature.home.component.HomeListVerticalGridScroll
 import hackathon.picky.feature.home.component.HomeTopBanner

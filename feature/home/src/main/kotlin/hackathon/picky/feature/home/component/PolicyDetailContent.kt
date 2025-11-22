@@ -28,21 +28,23 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.core.designsystem.R
 import hackathon.picky.core.designsystem.common.BackTopBar
-import hackathon.picky.core.designsystem.common.PickySnackbar
-import kotlinx.coroutines.launch
+import hackathon.picky.core.designsystem.common.DateBox
 import hackathon.picky.core.designsystem.theme.AppColors
 import hackathon.picky.core.designsystem.theme.Dimens
 import hackathon.picky.core.designsystem.theme.Gray100
@@ -53,7 +55,10 @@ import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import hackathon.picky.core.designsystem.theme.Primary
 import hackathon.picky.core.designsystem.theme.Secondary
 import hackathon.picky.feature.home.model.HomeUiState
-import hackathon.picky.feature.home.model.PolicyDetail
+import hackathon.picky.feature.home.model.policyDetailData
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,8 +85,17 @@ fun PolicyDetailContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(16f / 9f)
-                    .background(AppColors.Gray02)
-            )
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(policyDetail.imgUrl)
+                        .crossfade(true) // 부드럽게 로딩
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.matchParentSize()
+                )
+            }
 
             Spacer(modifier = Modifier.height(Dimens.Space24))
 
@@ -93,20 +107,12 @@ fun PolicyDetailContent(
                     .padding(horizontal = Dimens.Space20)
             ) {
                 // D-13 태그 (박스 형태)
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Secondary)
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = "D${uiState.daysRemaining}",
-                        fontFamily = PretendardFontFamily,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Primary
-                    )
-                }
+
+                DateBox(
+                    closingDate = policyDetail.closingDate ?: LocalDate.now(),
+                    isAll = policyDetail.closingDate == null
+                )
+
                 Spacer(modifier = Modifier.height(Dimens.Space8))
 
                 // 제목
@@ -142,13 +148,9 @@ fun PolicyDetailContent(
                 // 신청 기간
                 SectionTitle(title = "신청 기간")
                 Spacer(modifier = Modifier.height(Dimens.Space10))
-                Text(
-                    text = policyDetail.applicationPeriod,
-                    fontFamily = PretendardFontFamily,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Gray800,
-                    modifier = Modifier.padding(bottom = Dimens.Space40)
+                ApplicationPeriodText(
+                    startDate = policyDetail.startDate,
+                    endDate = policyDetail.closingDate
                 )
 
                 // 신청 자격
@@ -347,25 +349,9 @@ private fun BottomActionBar(
     }
 }
 
-// Preview 데이터
-private val previewPolicyDetail = PolicyDetail(
-    id = "1",
-    title = "청년 내일채움공제",
-    department = "고용노동부",
-    applicationPeriod = "2024.01.01 ~ 2024.12.31",
-    eligibility = listOf(
-        "만 15세 ~ 34세 청년",
-        "중소·중견기업 정규직 재직자",
-        "근속기간 6개월 미만"
-    ),
-    description = "청년이 중소·중견기업에서 장기간 근속할 수 있도록 지원하는 제도입니다. " +
-            "청년과 기업이 공동으로 적립한 금액에 정부가 지원금을 더해 2년 또는 3년 후 목돈을 마련할 수 있도록 돕습니다. " +
-            "청년의 자산형성과 중소기업의 인력 안정화를 동시에 지원하는 정책입니다."
-)
 
 private val previewUiState = HomeUiState.Detail(
-    policyDetail = previewPolicyDetail,
-    daysRemaining = 13,
+    policyDetail = policyDetailData,
     isBookmarked = false,
     previousUiState = HomeUiState.Init,
 )
@@ -402,5 +388,20 @@ private fun ErrorScreenPreview() {
     ErrorScreen(
         message = "네트워크 오류가 발생했습니다.",
         onBackClick = {}
+    )
+}
+
+
+@Composable
+fun ApplicationPeriodText(startDate: LocalDate, endDate: LocalDate?) {
+    val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
+    val text = "${startDate.format(formatter)} ~ ${endDate?.format(formatter)?: "상시"}"
+    Text(
+        text = text,
+        fontFamily = PretendardFontFamily,
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Normal,
+        color = Gray800,
+        modifier = Modifier.padding(bottom = Dimens.Space40)
     )
 }

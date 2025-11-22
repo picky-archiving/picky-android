@@ -1,8 +1,8 @@
 package hackathon.picky.feature.home.model
 
 import androidx.annotation.DrawableRes
-import hackathon.picky.core.model.Category
-import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.common.Category
+import hackathon.picky.core.model.common.CommonListItem
 
 data class HomeSectionListItem(
     val title: String,

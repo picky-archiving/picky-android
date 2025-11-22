@@ -1,6 +1,5 @@
 package hackathon.picky.feature.mypage
 
-import android.R
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,21 +19,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hackathon.picky.core.designsystem.common.BackTopBar
 import hackathon.picky.core.designsystem.theme.AppColors
-import hackathon.picky.core.model.CommonListItemTest
+import hackathon.picky.core.model.common.CommonListItemTest
 import hackathon.picky.feature.home.component.PolicyDetailContent
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.mypage.component.BookmarkSection
 import hackathon.picky.feature.mypage.component.MyPageProfileCard
 import hackathon.picky.feature.mypage.component.RankSelectionBottomSheet
 import hackathon.picky.feature.mypage.model.MyPageUiState
-import java.time.LocalDateTime
 
 @Composable
 fun MyPageRoute(
     padding: PaddingValues,
     onBackClick: () -> Unit,
     viewModel: MyPageViewModel = hiltViewModel(),
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onClickDetail: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -62,7 +61,7 @@ fun MyPageRoute(
         onBackClick = handleBackClick,
         onSearchClick = onSearchClick,
         onEditClick = viewModel::onEditClick,
-        onClickDetail = viewModel::clickDetail,
+        onClickDetail = onClickDetail,
         onBookmarkClick = viewModel::toggleBookmark,
         onDismissBottomSheet = viewModel::dismissBottomSheet,
         onRankSelected = viewModel::updateRank
@@ -135,7 +134,6 @@ private fun MyPageScreen(
                 val homeDetailState = HomeUiState.Detail(
                     previousUiState = HomeUiState.Init,
                     policyDetail = uiState.policyDetail,
-                    daysRemaining = uiState.daysRemaining,
                     isBookmarked = uiState.isBookmarked
                 )
 

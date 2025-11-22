@@ -1,0 +1,21 @@
+package hackathon.picky.core.data.mapper.policiy
+
+import hackathon.picky.core.data.model.policy.PolicyDetailEntity
+import hackathon.picky.core.network.model.response.PolicyDetailData
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+fun PolicyDetailData.toEntity(): PolicyDetailEntity {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    return PolicyDetailEntity(
+        id = this.id,
+        title = this.title,
+        imgUrl = this.imageUrl,
+        department = this.host,
+        startDate = LocalDate.parse(this.startDate, formatter),
+        closingDate = this.endDate?.let { LocalDate.parse(it, formatter) },
+        eligibility = this.qualifications,
+        description = this.content,
+        bookmarked = this.bookmarked
+    )
+}

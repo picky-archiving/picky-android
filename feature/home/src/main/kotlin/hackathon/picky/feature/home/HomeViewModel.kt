@@ -3,10 +3,12 @@ package hackathon.picky.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hackathon.picky.core.model.Category
-import hackathon.picky.core.model.SearchFilter
+import hackathon.picky.core.data.repo.PolicyRepository
+import hackathon.picky.core.model.common.Category
+import hackathon.picky.core.model.common.SearchFilter
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
+import hackathon.picky.feature.home.model.PolicyDetail
 import hackathon.picky.feature.home.model.policyDetailData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,39 +16,71 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val policyRepository: PolicyRepository
+) : ViewModel() {
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Init)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     fun init(policyId: Int?) = viewModelScope.launch { // 초기 화면 설정
-        _uiState.update { prev ->
-            policyId?.let {
-                HomeUiState.Detail(
-                    previousUiState = null,
-                    policyDetail = policyDetailData,
-                    daysRemaining = calculateDaysRemaining("2024.09.28"),
-                    isBookmarked = false
-                )
-            } ?: HomeUiTest
-        }
+        if(policyId != null) {
+            policyRepository.getPolicyDetail(1)
+                .onSuccess { data ->
+                    _uiState.update {
+                        HomeUiState.Detail(
+                            previousUiState = null,
+                            policyDetail = PolicyDetail(
+                                id = data.id.toInt(),
+                                title = data.title,
+                                imgUrl = data.imgUrl,
+                                department = data.department,
+                                startDate = data.startDate,
+                                closingDate = data.closingDate,
+                                eligibility = data.eligibility,
+                                description = data.description
+                            ),
+                            isBookmarked = data.bookmarked
+                        )
+                    }
+                }.onFailure { throwable ->
+                    throwable.printStackTrace()
+                    _uiState.update {
+                        HomeUiTest
+                    }
+                }
+        } else _uiState.update { HomeUiTest }
     }
 
 
     fun clickDetail(policyId: Int) = viewModelScope.launch {
-        _uiState.update { prev ->
-            HomeUiState.Detail(
-                previousUiState = prev,
-                policyDetail = policyDetailData,
-                daysRemaining = calculateDaysRemaining("2024.09.28"),
-                isBookmarked = false
-            )
-        }
+        policyRepository.getPolicyDetail(policyId.toLong())
+            .onSuccess { data ->
+                _uiState.update { prev->
+                    HomeUiState.Detail(
+                        previousUiState = prev,
+                        policyDetail = PolicyDetail(
+                            id = data.id.toInt(),
+                            title = data.title,
+                            imgUrl = data.imgUrl,
+                            department = data.department,
+                            startDate = data.startDate,
+                            closingDate = data.closingDate,
+                            eligibility = data.eligibility,
+                            description = data.description
+                        ),
+                        isBookmarked = data.bookmarked
+                    )
+                }
+            }.onFailure {
+
+            }
     }
 
 

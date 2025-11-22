@@ -1,4 +1,4 @@
-package hackathon.picky.core.model
+package hackathon.picky.core.model.common
 
 enum class SearchFilter(val label: String) {
     RECENT(label = "최신순"), POPULAR(label = "인기순")

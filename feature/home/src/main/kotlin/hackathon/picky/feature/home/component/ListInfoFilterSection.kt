@@ -1,6 +1,5 @@
 package hackathon.picky.feature.home.component
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +30,7 @@ import hackathon.picky.core.designsystem.theme.Gray600
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import hackathon.picky.core.designsystem.theme.Primary
-import hackathon.picky.core.model.SearchFilter
+import hackathon.picky.core.model.common.SearchFilter
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)

@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hackathon.picky.core.designsystem.common.CommonListItemBox
 import hackathon.picky.core.designsystem.common.CommonListType
-import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.feature.home.model.HomeUiTest
 
 @Composable
