@@ -1,4 +1,4 @@
-package hackathon.picky.core.model
+package hackathon.picky.core.model.common
 
 import androidx.annotation.DrawableRes
 import com.example.core.designsystem.R

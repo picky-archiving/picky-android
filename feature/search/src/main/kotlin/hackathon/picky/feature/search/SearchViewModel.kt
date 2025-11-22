@@ -2,16 +2,13 @@ package hackathon.picky.feature.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.core.designsystem.R
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hackathon.picky.core.model.CommonListItem
-import hackathon.picky.core.model.CommonListItemTest
+import hackathon.picky.core.model.common.CommonListItemTest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel

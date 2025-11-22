@@ -1,10 +1,12 @@
 package hackathon.picky.feature.home.model
 
 import android.R
-import hackathon.picky.core.model.Category
-import hackathon.picky.core.model.CommonListItem
-import hackathon.picky.core.model.CommonListItemTest
-import hackathon.picky.core.model.SearchFilter
+import hackathon.picky.core.model.common.Category
+import hackathon.picky.core.model.common.CommonListItem
+import hackathon.picky.core.model.common.CommonListItemTest
+import hackathon.picky.core.model.common.SearchFilter
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 sealed class HomeUiState {
     data class Main(
@@ -16,7 +18,6 @@ sealed class HomeUiState {
     data class Detail(
         val previousUiState: HomeUiState?,
         val policyDetail: PolicyDetail,
-        val daysRemaining: Int,
         val isBookmarked: Boolean = false
     ) : HomeUiState()
 
@@ -61,10 +62,10 @@ val HomeUiTest = HomeUiState.Main(
 )
 
 val policyDetailData = PolicyDetail(
-    id = "D-13",
+    id = 1,
     title = "정책명 예시입니다. 길어질 시 예시입니다. 길어질 시 예시입니다.",
     department = "주관 부처",
-    applicationPeriod = "2024.09.07 ~ 2024.09.28",
+    closingDate = LocalDate.now().plusDays(15),
     eligibility = listOf(
         "백엔드 개발자",
         "프론트엔드 개발자",
@@ -78,5 +79,7 @@ val policyDetailData = PolicyDetail(
 정책 예시가 들어갑니다.정책 예시가 들어갑니다.
 정책 예시가 들어갑니다.정책 예시가 들어갑니다.
 정책 예시가 들어갑니다.정책 예시가 들어갑니다.
-정책 예시가 들어갑니다.정책 예시가 들어갑니다.""".trimIndent()
+정책 예시가 들어갑니다.정책 예시가 들어갑니다.""".trimIndent(),
+    imgUrl = "https://sosal.kr/1144?pidx=0",
+    startDate = LocalDate.now().minusDays(15),
 )

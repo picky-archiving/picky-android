@@ -1,14 +1,15 @@
-package hackathon.picky.feature.home.model
+package hackathon.picky.core.data.model.policy
 
 import java.time.LocalDate
 
-data class PolicyDetail(
-    val id: Int,
+data class PolicyDetailEntity(
+    val id: Long,
     val title: String,
     val imgUrl: String,
     val department: String,
     val startDate: LocalDate,
     val closingDate: LocalDate?,
     val eligibility: List<String>,
-    val description: String
+    val description: String,
+    val bookmarked: Boolean
 )

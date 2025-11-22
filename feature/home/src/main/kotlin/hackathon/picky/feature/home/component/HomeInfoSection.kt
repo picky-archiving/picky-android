@@ -34,9 +34,10 @@ import hackathon.picky.core.designsystem.common.CommonListType
 import hackathon.picky.core.designsystem.theme.Gray400
 import hackathon.picky.core.designsystem.theme.Gray900
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
-import hackathon.picky.core.model.Category
-import hackathon.picky.core.model.CommonListItem
+import hackathon.picky.core.model.common.Category
+import hackathon.picky.core.model.common.CommonListItem
 import hackathon.picky.feature.home.model.HomeUiTest
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Composable
@@ -159,7 +160,7 @@ fun CommonListItemBoxPrev() {
         imageUrl = "https://sosal.kr/1144?pidx=0",
         title = "exampleasasasasasasas",
         onClickDetail = { },
-        closingDate = LocalDateTime.now(),
+        closingDate = LocalDate.now(),
         id = 1,
     )
 }
