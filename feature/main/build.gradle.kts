@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.auth)
+    implementation(projects.feature.mypage)
 
     implementation(libs.kotlinx.immutable)
 }
