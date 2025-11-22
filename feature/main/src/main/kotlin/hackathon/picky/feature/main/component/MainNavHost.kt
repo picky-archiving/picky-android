@@ -41,7 +41,7 @@ fun MainNavHost(
                 padding = padding,
                 onBackClick = navigator::popBackStackIfNotHome,
                 onSearchClick = navigator::navigateSearch,
-                onClickDetail = navigator::navigatePolicyDetail
+                navigateDetail = navigator::navigatePolicyDetail
             )
 
             authNavGraph(

@@ -39,7 +39,7 @@ data class PolicyDetailData(
     val url: String, // 정책 세부 내용을 확인할 수 있는 정적 페이지 또는 외부 링크
 
     @SerialName("limitIncomeBracket")
-    val limitIncomeBracket: Long, // 신청 가능한 최대 소득분위 (예: 4 = 4분위 이하 지원 가능)
+    val limitIncomeBracket: Long?, // 신청 가능한 최대 소득분위 (예: 4 = 4분위 이하 지원 가능)
 
     @SerialName("imageUrl")
     val imageUrl: String, // 정책 이미지 경로 (정적 파일)

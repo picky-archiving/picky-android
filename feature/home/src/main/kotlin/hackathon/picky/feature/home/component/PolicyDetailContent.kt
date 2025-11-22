@@ -53,11 +53,9 @@ import hackathon.picky.core.designsystem.theme.Gray500
 import hackathon.picky.core.designsystem.theme.Gray800
 import hackathon.picky.core.designsystem.theme.PretendardFontFamily
 import hackathon.picky.core.designsystem.theme.Primary
-import hackathon.picky.core.designsystem.theme.Secondary
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.policyDetailData
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -66,7 +64,8 @@ import java.time.format.DateTimeFormatter
 fun PolicyDetailContent(
     uiState: HomeUiState.Detail,
     onBackClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onClickSubmit: () -> Unit
 ) {
     val policyDetail = uiState.policyDetail
     Column(
@@ -185,7 +184,8 @@ fun PolicyDetailContent(
 
         BottomActionBar(
             isBookmarked = uiState.isBookmarked,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onClickSubmit = onClickSubmit,
         )
     }
 }
@@ -286,7 +286,8 @@ private fun ErrorScreen(
 @Composable
 private fun BottomActionBar(
     isBookmarked: Boolean,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onClickSubmit: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -334,7 +335,9 @@ private fun BottomActionBar(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(),
-                    onClick = { }
+                    onClick = {
+                        onClickSubmit()
+                    }
                 )
                 .background(Primary),
             contentAlignment = Alignment.Center
@@ -362,7 +365,8 @@ private fun PolicyDetailContentPreview() {
     PolicyDetailContent(
         uiState = previewUiState,
         onBackClick = {},
-        onBookmarkClick = {}
+        onBookmarkClick = {},
+        onClickSubmit = {},
     )
 }
 
@@ -372,7 +376,8 @@ private fun PolicyDetailContentBookmarkedPreview() {
     PolicyDetailContent(
         uiState = previewUiState.copy(isBookmarked = true),
         onBackClick = {},
-        onBookmarkClick = {}
+        onBookmarkClick = {},
+        onClickSubmit = { },
     )
 }
 

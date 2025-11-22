@@ -43,7 +43,8 @@ class RetrofitPolicyDatasource @Inject constructor(
 
     override suspend fun removeBookmark(policyId: Long): ApiResponse<BookmarkToggleResponse> {
         return runRemote { policyApi.removeBookmark(policyId) }
-        
+    }
+
     override suspend fun getPolicyIncomeList(): ApiResponse<PolicyIncomeResponse> = runRemote {
         policyApi.getPolicyIncomeList()
     }

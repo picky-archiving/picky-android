@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,6 +44,7 @@ import hackathon.picky.feature.home.component.HomeListVerticalGridScroll
 import hackathon.picky.feature.home.component.HomeTopBanner
 import hackathon.picky.feature.home.component.ListInfoFilterSection
 import hackathon.picky.feature.home.component.PolicyDetailContent
+import hackathon.picky.feature.home.component.WebViewScreen
 import hackathon.picky.feature.home.model.HomeUiState
 import hackathon.picky.feature.home.model.HomeUiTest
 import kotlinx.coroutines.delay
@@ -61,6 +63,8 @@ internal fun HomeRoute(
 
     val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
+    val context = LocalContext.current
+
     LaunchedEffect(policyId) {
         viewModel.init(policyId)
     }
@@ -74,20 +78,21 @@ internal fun HomeRoute(
     }
 
     BackHandler(enabled = uiState is HomeUiState) {
-        backDispatcher?.let { viewModel.goBack(onBackPressed) }
+        backDispatcher?.let { viewModel.goBack(onBackPressed, context) }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         HomeScreen(
             padding = padding,
             uiState = uiState,
-            onBackClick = { backDispatcher?.let { viewModel.goBack(onBackPressed) } },
+            onBackClick = { backDispatcher?.let { viewModel.goBack(onBackPressed, context) } },
             onBookMarClick = viewModel::toggleBookmark,
             onClickDetail = viewModel::clickDetail,
             navigateMy = navigateMy,
             navigateSearch = navigateSearch,
             onClickList = viewModel::clickList,
-            onFilterChange = viewModel::onFilterChange
+            onFilterChange = viewModel::onFilterChange,
+            onClickSubmit = viewModel::onClickSubmit
         )
 
         // 스낵바 표시
@@ -123,7 +128,8 @@ private fun HomeScreen(
     onClickList: (category: Category) -> Unit,
     navigateMy: () -> Unit,
     navigateSearch: () -> Unit,
-    onFilterChange: (SearchFilter) -> Unit
+    onFilterChange: (SearchFilter) -> Unit,
+    onClickSubmit: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     Crossfade(
@@ -190,7 +196,8 @@ private fun HomeScreen(
                     PolicyDetailContent(
                         uiState = uiState as HomeUiState.Detail,
                         onBackClick = onBackClick,
-                        onBookmarkClick = onBookMarClick
+                        onBookmarkClick = onBookMarClick,
+                        onClickSubmit = onClickSubmit
                     )
                 }
 
@@ -217,6 +224,9 @@ private fun HomeScreen(
 
                 }
 
+                is HomeUiState.Web ->{
+                    WebViewScreen(uiState.webUrl)
+                }
                 else -> {}
             }
         }
@@ -235,6 +245,7 @@ fun HomeScreenPrev() {
         navigateMy = { },
         navigateSearch = {},
         onClickList = {},
-        onFilterChange = {}
+        onFilterChange = {},
+        onClickSubmit = TODO(),
     )
 }
